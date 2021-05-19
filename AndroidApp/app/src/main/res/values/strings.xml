@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">AndroidApp</string>
-    <string name="nome">nome</string>
     <string name="qual_il_tuo_nome">qual_il_tuo_nome</string>
     <string name="inserisci_qui_il_tuo_vero_nome_per_essere_identificato_correttamente">inserisci_qui_il_tuo_vero_nome_per_essere_identificato_correttamente</string>
     <string name="continua">continua</string>
@@ -8,5 +7,8 @@
     <string name="donne">donne</string>
     <string name="desideri_incontrare">desideri_incontrare</string>
     <string name="sei">sei</string>
-    <string name="continua">continua</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="qual_la_tua_et">qual è la tua età</string>
+    <string name="nome">nome</string>
 </resources>
