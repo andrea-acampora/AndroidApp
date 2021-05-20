@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.textfield.TextInputEditText;
+import com.example.androidapp.utils.Utilities;
 
 public class AgeFragment extends Fragment {
 
@@ -32,11 +32,14 @@ public class AgeFragment extends Fragment {
             btnContinua.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    activity.getUser().setBirthdate(date.toString());
-                    Utilities.insertFragment((AppCompatActivity) activity, new GenderFragment(), "AGE_FRAGMENT");
+                    int day = date.getDayOfMonth();
+                    int month = date.getMonth();
+                    int year =  date.getYear();
+                    String birthdate = String.valueOf(year) + "-" + String.valueOf(month) + "-" + String.valueOf(day);
+                    activity.getUser().setBirthdate(birthdate);
+                    Utilities.insertFragment((AppCompatActivity) activity, new GenderFragment(), "GENDER_FRAGMENT");
                 }
             });
         }
-
     }
 }

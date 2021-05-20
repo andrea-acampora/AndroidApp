@@ -8,15 +8,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.androidapp.Data.User;
+import com.example.androidapp.data.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.UUID;
 
 
@@ -35,7 +33,7 @@ public class SecondActivity extends AppCompatActivity {
             public void onClick(View v) {
                 db = FirebaseDatabase.getInstance();
                 userTable = db.getReference("Users");
-                User user = new User("a", "s", "as", "a", "a", "a");
+                User user = new User("a","a", "s", "as", "a", "a", "a");
                 userTable.child(UUID.randomUUID().toString()).setValue(user);
                 userTable.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override

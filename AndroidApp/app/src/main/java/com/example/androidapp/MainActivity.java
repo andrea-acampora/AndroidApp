@@ -20,11 +20,6 @@ import com.google.firebase.database.Query;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final int RC_SIGN_IN = 100;
-    private GoogleSignInClient mGoogleSignInClient;
-
-    DatabaseReference userTable;
-    FirebaseDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if (account != null) {
             String userEmail = account.getEmail();
-            db = FirebaseDatabase.getInstance();
-            userTable = db.getReference("Users");
+            //db = FirebaseDatabase.getInstance();
+            //userTable = db.getReference("Users");
             //query a firebase per vedere se c'è l email nel db, se non c'è faccio partire activity per la registrazione, altrimenti lo mando alla home
             startActivity(new Intent(this, RegistrationActivity.class));
         } else{

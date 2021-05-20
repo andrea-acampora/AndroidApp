@@ -28,7 +28,7 @@
         android:layout_marginTop="56dp"
         android:indeterminate="false"
         android:max="100"
-        android:progress="20"
+        android:progress="80"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

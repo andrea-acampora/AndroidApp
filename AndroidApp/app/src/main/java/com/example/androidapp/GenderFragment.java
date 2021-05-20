@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
@@ -13,7 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.example.androidapp.utils.Utilities;
 
 public class GenderFragment extends Fragment {
     @Nullable
@@ -34,7 +33,9 @@ public class GenderFragment extends Fragment {
             btnContinua.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Utilities.insertFragment((AppCompatActivity) activity, new GenderFragment(), "AGE_FRAGMENT");
+                    ((RegistrationActivity) getActivity()).getUser().setGender("male");
+                    ((RegistrationActivity) getActivity()).getUser().setPreferences("F");
+                    Utilities.insertFragment((AppCompatActivity) activity, new DescriptionFragment(), "DESCRIPTION_FRAGMENT");
                 }
             });
         }

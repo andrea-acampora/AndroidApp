@@ -3,9 +3,11 @@ package com.example.androidapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 
-import com.example.androidapp.Data.User;
+import com.example.androidapp.data.User;
+import com.example.androidapp.utils.Utilities;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -16,8 +18,11 @@ public class RegistrationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
         user = new User();
-
-        Utilities.insertFragment(this, new NameFragment(), "FRAGMENT_TAG");
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        if (account != null) {
+            user.setEmail(account.getEmail());
+        }
+            Utilities.insertFragment(this, new NameFragment(), "FRAGMENT_TAG");
     }
 
     public User getUser(){

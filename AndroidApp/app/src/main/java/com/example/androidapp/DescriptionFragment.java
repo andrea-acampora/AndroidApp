@@ -14,12 +14,12 @@ import androidx.fragment.app.Fragment;
 import com.example.androidapp.utils.Utilities;
 import com.google.android.material.textfield.TextInputEditText;
 
-public class NameFragment extends Fragment {
+public class DescriptionFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_name, container, false);
+        return inflater.inflate(R.layout.fragment_description, container, false);
     }
 
     @Override
@@ -28,13 +28,13 @@ public class NameFragment extends Fragment {
         final RegistrationActivity activity = (RegistrationActivity) getActivity();
         if(activity != null){
             Button btnContinua = view.findViewById(R.id.buttonContinua);
-            TextInputEditText name = view.findViewById(R.id.name);
+            TextInputEditText description = view.findViewById(R.id.description);
             btnContinua.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(name.getText().length() > 0){
-                        activity.getUser().setName(name.getText().toString());
-                        Utilities.insertFragment((AppCompatActivity) activity, new AgeFragment(), "AGE_FRAGMENT");
+                    if(description.getText().length() > 0){
+                        activity.getUser().setDescription(description.getText().toString());
+                        Utilities.insertFragment((AppCompatActivity) activity, new PhotoFragment(), "PHOTO_FRAGMENT");
                     }
                 }
             });

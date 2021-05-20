@@ -14,4 +14,11 @@
     <string name="sei">sei...</string>
     <string name="bottonefemmina">bottoneFemmina</string>
     <string name="bottonemaschio">bottoneMaschio</string>
+    <string name="fotocamera">fotocamera</string>
+    <string name="galleria">galleria</string>
+    <string name="profilepic">profilePic</string>
+    <string name="parlaci_di_te_sappiamo_che_sei_una_persona_interessante">parlaci di te, sappiamo che sei una persona interessante! :)</string>
+    <string name="descrizione">descrizione</string>
+    <string name="parlaci_di_te">Parlaci di te</string>
+    <string name="sappiamo_che_sei_una_persona_interessante">sappiamo che sei una persona interessante</string>
 </resources>
