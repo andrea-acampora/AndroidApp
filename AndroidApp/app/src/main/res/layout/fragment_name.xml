@@ -55,10 +55,10 @@
         android:id="@+id/buttonContinua"
         android:layout_width="186dp"
         android:layout_height="57dp"
-        android:layout_marginStart="112dp"
         android:layout_marginBottom="48dp"
         android:text="@string/continua"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
 
