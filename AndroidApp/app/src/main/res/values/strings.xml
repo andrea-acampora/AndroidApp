@@ -5,11 +5,13 @@
     <string name="continua">continua</string>
     <string name="uomini">uomini</string>
     <string name="donne">donne</string>
-    <string name="desideri_incontrare">desideri_incontrare</string>
-    <string name="sei">sei</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="qual_la_tua_et">qual è la tua età</string>
     <string name="nome">nome</string>
     <string name="qual_la_tua_data_di_nascita">qual è la tua data di nascita</string>
+    <string name="desideri_incontrare">desideri incontrare...</string>
+    <string name="sei">sei...</string>
+    <string name="bottonefemmina">bottoneFemmina</string>
+    <string name="bottonemaschio">bottoneMaschio</string>
 </resources>
