@@ -1,10 +1,12 @@
 <resources>
-    <string name="app_name">AndroidApp</string>
+    <string name="app_name">Next2Me</string>
     <string name="qual_il_tuo_nome">qual_il_tuo_nome</string>
     <string name="inserisci_qui_il_tuo_vero_nome_per_essere_identificato_correttamente">inserisci_qui_il_tuo_vero_nome_per_essere_identificato_correttamente</string>
     <string name="continua">continua</string>
     <string name="uomini">uomini</string>
     <string name="donne">donne</string>
+    <string name="facebook_app_id">476834663592284</string>
+    <string name="fb_login_protocol_scheme">fb476834663592284</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="qual_la_tua_et">qual è la tua età</string>

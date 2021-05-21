@@ -1,4 +1,4 @@
-package com.example.androidapp;
+package com.example.next2me;
 
 import org.junit.Test;
 

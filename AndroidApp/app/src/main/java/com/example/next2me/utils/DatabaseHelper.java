@@ -1,14 +1,14 @@
-package com.example.androidapp.utils;
+package com.example.next2me.utils;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.androidapp.data.User;
+import com.example.next2me.data.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -16,7 +16,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.util.UUID;
 
 public class DatabaseHelper {
 
@@ -47,6 +46,6 @@ public class DatabaseHelper {
 
     public void addUserToDB(User user){
         DatabaseReference userTable = db.getReference("Users");
-        userTable.child(user.getId()).setValue(user);
+        userTable.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user);
     }
 }

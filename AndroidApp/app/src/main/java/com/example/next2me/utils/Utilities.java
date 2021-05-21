@@ -1,10 +1,10 @@
-package com.example.androidapp.utils;
+package com.example.next2me.utils;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.androidapp.R;
+import com.example.next2me.R;
 
 public class Utilities {
     public static void insertFragment(AppCompatActivity activity, Fragment fragment, String tag){

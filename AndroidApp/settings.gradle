@@ -1,2 +1,2 @@
 include ':app'
-rootProject.name = "AndroidApp"
+rootProject.name = "Next2Me"

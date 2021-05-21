@@ -1,4 +1,4 @@
-package com.example.androidapp;
+package com.example.next2me;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.example.androidapp.utils.Utilities;
+import com.example.next2me.utils.Utilities;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class NameFragment extends Fragment {
@@ -29,13 +29,10 @@ public class NameFragment extends Fragment {
         if(activity != null){
             Button btnContinua = view.findViewById(R.id.buttonContinua);
             TextInputEditText name = view.findViewById(R.id.name);
-            btnContinua.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(name.getText().length() > 0){
-                        activity.getUser().setName(name.getText().toString());
-                        Utilities.insertFragment((AppCompatActivity) activity, new AgeFragment(), "AGE_FRAGMENT");
-                    }
+            btnContinua.setOnClickListener((View.OnClickListener) v -> {
+                if(name.getText().length() > 0){
+                    activity.getUser().setName(name.getText().toString());
+                    Utilities.insertFragment((AppCompatActivity) activity, new AgeFragment(), "AGE_FRAGMENT");
                 }
             });
         }

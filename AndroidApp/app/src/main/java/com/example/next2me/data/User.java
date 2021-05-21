@@ -1,6 +1,4 @@
-package com.example.androidapp.data;
-
-import java.util.UUID;
+package com.example.next2me.data;
 
 public class User {
 
@@ -12,12 +10,9 @@ public class User {
     private String description;
     private String gender;
     private String preferences;
-    private String id;
 
 
-    public User() {
-        this.id = UUID.randomUUID().toString();
-    }
+    public User() {}
 
     public User(String name, String email, String surname, String birthdate, String description, String gender, String preferences) {
         this.name = name;
@@ -85,7 +80,4 @@ public class User {
         this.email = email;
     }
 
-    public String getId() {
-        return id;
-    }
 }

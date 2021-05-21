@@ -1,4 +1,4 @@
-package com.example.androidapp;
+package com.example.next2me;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -14,13 +14,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.example.androidapp.utils.DatabaseHelper;
-import com.example.androidapp.utils.Utilities;
+import com.example.next2me.utils.DatabaseHelper;
+import com.google.firebase.auth.FirebaseAuth;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import static android.app.Activity.RESULT_OK;
 
@@ -58,7 +56,7 @@ public class PhotoFragment extends Fragment {
                     profilePic.buildDrawingCache();
                     Bitmap bitmap = ((BitmapDrawable) profilePic.getDrawable()).getBitmap();
                     DatabaseHelper dbh = new DatabaseHelper();
-                    dbh.addPhotoToStorage(bitmap, ((RegistrationActivity) getActivity()).getUser().getId());
+                    dbh.addPhotoToStorage(bitmap, FirebaseAuth.getInstance().getCurrentUser().getUid());
                     dbh.addUserToDB(((RegistrationActivity) getActivity()).getUser());
                     //Utilities.insertFragment((AppCompatActivity) activity, new GenderFragment(), "AGE_FRAGMENT");
                 }
