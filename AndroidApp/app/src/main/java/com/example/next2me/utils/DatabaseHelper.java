@@ -67,11 +67,6 @@ public class DatabaseHelper {
                 photo[0] = Utilities.byteToBitmap(bytes);
 
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.e("photo", "error retrieve photo");
-            }
         });
         return photo[0];
     }
@@ -88,5 +83,7 @@ public class DatabaseHelper {
         return db;
     }
 
-
+    public StorageReference getStorageRef() {
+        return storageRef;
+    }
 }
