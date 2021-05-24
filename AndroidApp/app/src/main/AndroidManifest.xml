@@ -16,7 +16,6 @@
         <activity android:name=".RegistrationActivity">
             <intent-filter>
                 <action android:name="android.media.action.IMAGE_CAPTURE" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

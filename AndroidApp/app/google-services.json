@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "902040888069-rcvbl65ld9l2k5lra43a0j5qfsjss7fn.apps.googleusercontent.com",
+          "client_id": "902040888069-qvpagdr1gpo4hg29vhllegnq3vvcr4sn.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.next2me",
-            "certificate_hash": "1d90546a97c795cb81789af599590e75c373fe90"
+            "certificate_hash": "9ceb5080ede8117e726b558a55670cd50385b68c"
           }
         },
         {
