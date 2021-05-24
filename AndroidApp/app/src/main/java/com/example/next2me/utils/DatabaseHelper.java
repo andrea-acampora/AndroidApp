@@ -19,10 +19,20 @@ import java.io.ByteArrayOutputStream;
 
 public class DatabaseHelper {
 
-    private FirebaseDatabase db = FirebaseDatabase.getInstance();
-    private FirebaseStorage storage = FirebaseStorage.getInstance();
-    private StorageReference storageRef = storage.getReferenceFromUrl("gs://androidapp-1620979629021.appspot.com");
+    private final FirebaseDatabase db = FirebaseDatabase.getInstance();
+    private final FirebaseStorage storage = FirebaseStorage.getInstance();
+    private final StorageReference storageRef = storage.getReferenceFromUrl("gs://androidapp-1620979629021.appspot.com");
 
+
+    private static DatabaseHelper instance = null;
+    private DatabaseHelper(){}
+
+    public static DatabaseHelper getInstance(){
+        if(instance == null){
+            instance = new DatabaseHelper();
+        }
+        return instance;
+    }
 
     public void addPhotoToStorage(Bitmap imageBitmap, String userId){
        StorageReference imageRef = storageRef.child("ProfilePictures/" + userId + ".jpg");
@@ -43,9 +53,34 @@ public class DatabaseHelper {
        });
     }
 
+    public Bitmap getPhotoFromStorage(String userId){
+        StorageReference imageRef = storageRef.child("ProfilePictures/" + userId + ".jpg");
+        final long ONE_MEGABYTE = 1024 * 1024;
+        final Bitmap[] photo = new Bitmap[1];
+        imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                photo[0] = Utilities.byteToBitmap(bytes);
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.e("photo", "error retrieve photo");
+            }
+        });
+        return photo[0];
+    }
+
 
     public void addUserToDB(User user){
         DatabaseReference userTable = db.getReference("Users");
         userTable.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user);
     }
+
+    public FirebaseDatabase getDb() {
+        return db;
+    }
+
+
 }

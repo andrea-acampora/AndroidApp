@@ -23,4 +23,11 @@
     <string name="descrizione">descrizione</string>
     <string name="parlaci_di_te">Parlaci di te</string>
     <string name="sappiamo_che_sei_una_persona_interessante">sappiamo che sei una persona interessante</string>
+    <string name="description">description</string>
+    <string name="preferences">preferences</string>
+    <string name="gender">gender</string>
+    <string name="birthdate">birthdate</string>
+    <string name="surname">surname</string>
+    <string name="name">name</string>
+    <string name="mail">mail</string>
 </resources>

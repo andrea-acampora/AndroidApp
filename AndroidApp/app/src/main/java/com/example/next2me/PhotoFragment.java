@@ -14,9 +14,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.next2me.utils.DatabaseHelper;
+import com.example.next2me.utils.Utilities;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.IOException;
@@ -55,10 +57,10 @@ public class PhotoFragment extends Fragment {
                     profilePic.setDrawingCacheEnabled(true);
                     profilePic.buildDrawingCache();
                     Bitmap bitmap = ((BitmapDrawable) profilePic.getDrawable()).getBitmap();
-                    DatabaseHelper dbh = new DatabaseHelper();
+                    DatabaseHelper dbh = DatabaseHelper.getInstance();
                     dbh.addPhotoToStorage(bitmap, FirebaseAuth.getInstance().getCurrentUser().getUid());
                     dbh.addUserToDB(((RegistrationActivity) getActivity()).getUser());
-                    //Utilities.insertFragment((AppCompatActivity) activity, new GenderFragment(), "AGE_FRAGMENT");
+                    startActivity(new Intent(getActivity(), HomeActivity.class));
                 }
             });
 
@@ -104,20 +106,17 @@ public class PhotoFragment extends Fragment {
             Bundle extras = data.getExtras();
             bm = (Bitmap) extras.get("data");
             profilePic.setImageBitmap(bm);
-
         }
 
-
-            if(data != null && requestCode == REQUEST_GET_SINGLE_FILE){
-                    try {
-                       // Uri targetUri = data.getData();
-                       // bm = BitmapFactory.decodeStream(getContext().getContentResolver())
-                        bm = MediaStore.Images.Media.getBitmap(getActivity().getApplicationContext().getContentResolver(), data.getData());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                profilePic.setImageBitmap(bm);
+        if(data != null && requestCode == REQUEST_GET_SINGLE_FILE){
+            try {
+                // Uri targetUri = data.getData();
+                // bm = BitmapFactory.decodeStream(getContext().getContentResolver())
+                bm = MediaStore.Images.Media.getBitmap(getActivity().getApplicationContext().getContentResolver(), data.getData());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        profilePic.setImageBitmap(bm);
     }
 }
