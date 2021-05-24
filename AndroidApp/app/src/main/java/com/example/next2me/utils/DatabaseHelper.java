@@ -48,4 +48,10 @@ public class DatabaseHelper {
         DatabaseReference userTable = db.getReference("Users");
         userTable.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user);
     }
+
+    public FirebaseDatabase getDb() {
+        return db;
+    }
+
+
 }
