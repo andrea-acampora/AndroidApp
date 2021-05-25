@@ -3,11 +3,13 @@ package com.example.next2me;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,6 +17,7 @@ import com.example.next2me.data.User;
 import com.example.next2me.utils.DatabaseHelper;
 import com.example.next2me.utils.Utilities;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -43,7 +46,6 @@ public class HomeActivity extends AppCompatActivity {
                 User user = dataSnapshot.getValue(User.class);
                 DatabaseHelper dbh = DatabaseHelper.getInstance();
 
-
                 StorageReference imageRef = DatabaseHelper.getInstance().getStorageRef().child("ProfilePictures/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + ".jpg");
                 final long ONE_MEGABYTE = 1024 * 1024;
                 imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
@@ -67,5 +69,12 @@ public class HomeActivity extends AppCompatActivity {
                 Log.e("db","Error while reading data");
             }
         });
+
+        Button btnContinua = findViewById(R.id.mappa);
+        btnContinua.setOnClickListener((View.OnClickListener) v -> {
+            startActivity(new Intent(this, MapsActivity.class));
+        });
     }
+
+
 }

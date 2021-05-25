@@ -30,4 +30,7 @@
     <string name="surname">surname</string>
     <string name="name">name</string>
     <string name="mail">mail</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="janet_john">janet John</string>
+    <string name="vai_alla_mappa">vai alla mappa</string>
 </resources>
