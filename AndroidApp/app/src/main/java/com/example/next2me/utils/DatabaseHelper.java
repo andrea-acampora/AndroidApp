@@ -57,24 +57,10 @@ public class DatabaseHelper {
        });
     }
 
-    public Bitmap getPhotoFromStorage(String userId){
-        StorageReference imageRef = storageRef.child("ProfilePictures/" + userId + ".jpg");
-        final long ONE_MEGABYTE = 1024 * 1024;
-        final Bitmap[] photo = new Bitmap[1];
-        imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                photo[0] = Utilities.byteToBitmap(bytes);
-
-            }
-        });
-        return photo[0];
-    }
-
 
     public void addUserToDB(User user){
         DatabaseReference userTable = db.getReference("Users");
-        userTable.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user);
+        userTable.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("INFORMATIONS").setValue(user);
     }
 
 
