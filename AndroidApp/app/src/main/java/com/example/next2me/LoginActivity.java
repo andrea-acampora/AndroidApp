@@ -60,7 +60,6 @@ public class LoginActivity extends AppCompatActivity {
         fb_loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.d(TAG, "facebook:onSuccess:" + loginResult);
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
@@ -99,9 +98,7 @@ public class LoginActivity extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                Log.d("user", "task");
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                Log.d("user", "post task");
                 firebaseAuthWithGoogle(account);
 
             } catch (ApiException e) {
@@ -111,14 +108,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
-        Log.d("user", "1");
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        Log.d("user", "provider = " + credential.getProvider());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
-                        Log.d("user", user.getEmail());
                         updateUI(user);
                     } else {
                         updateUI(null);
@@ -153,7 +147,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
-            Log.d("user", user.getEmail());
             startActivity(new Intent(this, MainActivity.class));
         }
     }

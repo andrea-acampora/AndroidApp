@@ -37,12 +37,10 @@ public class HomeActivity extends AppCompatActivity {
     public void updateUI(){
         String uid = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         DatabaseReference userTable = DatabaseHelper.getInstance().getDb().getReference("Users");
-        userTable.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        userTable.child(uid).child("INFORMATIONS").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                DatabaseHelper dbh = DatabaseHelper.getInstance();
-
 
                 StorageReference imageRef = DatabaseHelper.getInstance().getStorageRef().child("ProfilePictures/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + ".jpg");
                 final long ONE_MEGABYTE = 1024 * 1024;
