@@ -51,7 +51,7 @@ public class HomeActivity extends AppCompatActivity {
 
                     }
                 });
-                
+
                 ((TextView)findViewById(R.id.name)).setText(user.getName());
                 ((TextView)findViewById(R.id.surname)).setText(user.getSurname());
                 ((TextView)findViewById(R.id.birthdate)).setText(user.getBirthdate());
