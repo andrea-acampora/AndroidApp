@@ -1,8 +1,13 @@
 package com.example.next2me;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
@@ -13,9 +18,14 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 
 
+import com.example.next2me.utils.DatabaseHelper;
 import com.example.next2me.utils.Utilities;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,14 +38,21 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
 
     private GoogleMap mMap;
+    private LatLng currentUserPos = new LatLng(44.0575500,12.5652800);
+    private MarkerOptions userMarkerOptions;
+    private Marker userMarker;
+    private final int LOCATION_PERMISSION_CODE = 1;
+    LocationManager locationManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -43,23 +60,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                startActivity(new Intent(this, HomeActivity.class));
+            }
+        }
+    }
+
+    @Override
     public void onMapReady(GoogleMap googleMap) {
+
         // Add a marker in Sydney, Australia,
         mMap = googleMap;
         // and move the map's camera to the same location.
 
-        Marker marker;
+        getLocation();
 
-        LatLng rimini = new LatLng(44.063333, 12.580833);
-        MarkerOptions options = new MarkerOptions().position(rimini);
+
+        userMarkerOptions = new MarkerOptions().position(currentUserPos);
         Bitmap bitmap = createUserBitmap();
-        if(bitmap!=null){
-            options.title("Ketan Ramani");
-            options.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
-            options.anchor(0.5f, 0.907f);
-            marker = mMap.addMarker(options);
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(rimini));
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+        if (bitmap != null) {
+            userMarkerOptions.title("Ketan Ramani");
+            userMarkerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+            userMarker = mMap.addMarker(userMarkerOptions);
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(currentUserPos));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentUserPos, 13));
         }
 
     }
@@ -96,7 +123,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             canvas.restore();
             try {
                 canvas.setBitmap(null);
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         } catch (Throwable t) {
             t.printStackTrace();
         }
@@ -110,5 +138,40 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return (int) Math.ceil(getResources().getDisplayMetrics().density * value);
     }
 
+    private void getLocation() {
+        try {
+            locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(MapsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
+            } else {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, MapsActivity.this);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        currentUserPos = new LatLng(location.getLatitude(), location.getLongitude());
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(currentUserPos));
+        userMarker.setPosition(currentUserPos);
+        DatabaseHelper.getInstance().SendUserPositionToDB(currentUserPos);
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(@NonNull String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(@NonNull String provider) {
+
+    }
 }

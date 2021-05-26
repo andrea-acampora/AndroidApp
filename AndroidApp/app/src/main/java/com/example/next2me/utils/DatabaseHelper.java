@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.next2me.data.User;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -61,6 +62,11 @@ public class DatabaseHelper {
     public void addUserToDB(User user){
         DatabaseReference userTable = db.getReference("Users");
         userTable.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("INFORMATIONS").setValue(user);
+    }
+
+    public void SendUserPositionToDB(LatLng userPos){
+        DatabaseReference userTable = db.getReference("Users");
+        userTable.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("POS").setValue(userPos);
     }
 
 

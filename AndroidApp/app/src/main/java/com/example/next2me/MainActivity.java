@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         if (user != null) {
             DatabaseReference userTable = DatabaseHelper.getInstance().getDb().getReference("Users");
             String uid = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
-            userTable.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            userTable.child(uid).child("INFORMATIONS").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Boolean isUserRegistered = dataSnapshot.exists();
