@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
-    tools:context=".LoginActivity">
+    tools:context=".SignUpActivity">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="LOGIN"
+        android:text="REGISTER"
         android:textAlignment="center"
         android:textColor="@color/color_black"
         android:textSize="30sp"
@@ -18,14 +18,14 @@
         android:layout_marginTop="150dp"   />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/email_login_TIL"
+        android:id="@+id/emailTIL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/email_login"
+            android:id="@+id/email_register"
             android:inputType="textEmailAddress"
 
             android:layout_width="match_parent"
@@ -35,17 +35,17 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/password_login_TIL"
+        android:id="@+id/passwordTIL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         app:passwordToggleEnabled="true"
-        android:layout_below="@id/email_login_TIL"
+        android:layout_below="@id/emailTIL"
         android:layout_marginTop="10dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/password_login"
+            android:id="@+id/password_register"
             android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -54,31 +54,27 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/button_login"
+        android:id="@+id/button_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/password_login_TIL"
+        android:layout_below="@id/passwordTIL"
         android:layout_centerHorizontal="true"
         android:drawableLeft="@drawable/ic_baseline_how_to_reg_24"
-        android:text="LOGIN"
-        android:layout_marginTop="10dp"/>
+        android:text="SIGN UP"
+        android:layout_marginTop="30dp"/>
 
-
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/google_sign_in_button"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/have_account_tv"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/button_login"
-        android:layout_marginTop="20dp"/>
-
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/facevook_login_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:text="Already have account? Login "
+        android:textColor="@color/black"
+        android:textStyle="italic"
+        android:layout_below="@+id/button_register"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/google_sign_in_button"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="30dp"/>
+
+
 
 
 </RelativeLayout>
-
