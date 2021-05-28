@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.next2me.utils.DatabaseHelper;
+import com.example.next2me.utils.UserHelper;
 import com.example.next2me.utils.Utilities;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -57,9 +58,10 @@ public class PhotoFragment extends Fragment {
                     profilePic.setDrawingCacheEnabled(true);
                     profilePic.buildDrawingCache();
                     Bitmap bitmap = ((BitmapDrawable) profilePic.getDrawable()).getBitmap();
+                    UserHelper.getInstance().setProfilePic(bitmap);
                     DatabaseHelper dbh = DatabaseHelper.getInstance();
-                    dbh.addPhotoToStorage(bitmap, FirebaseAuth.getInstance().getCurrentUser().getUid());
-                    dbh.addUserToDB(((RegistrationActivity) getActivity()).getUser());
+                    dbh.addPhotoToStorage(UserHelper.getInstance().getProfilePic(), FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    dbh.addUserToDB(UserHelper.getInstance().getAppUser());
                     startActivity(new Intent(getActivity(), HomeActivity.class));
                 }
             });

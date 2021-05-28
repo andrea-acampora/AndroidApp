@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <include layout="@layout/top_app_bar"/>
+
     <Button
         android:id="@+id/login_button"
         android:layout_width="300dp"

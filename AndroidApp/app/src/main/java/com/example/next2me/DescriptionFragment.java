@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.example.next2me.utils.UserHelper;
 import com.example.next2me.utils.Utilities;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -33,7 +34,7 @@ public class DescriptionFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     if(description.getText().length() > 0){
-                        activity.getUser().setDescription(description.getText().toString());
+                        UserHelper.getInstance().setDescription(description.getText().toString());
                         Utilities.insertFragment((AppCompatActivity) activity, new PhotoFragment(), "PHOTO_FRAGMENT");
                     }
                 }

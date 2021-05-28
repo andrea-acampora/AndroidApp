@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.example.next2me.utils.UserHelper;
 import com.example.next2me.utils.Utilities;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -31,7 +32,7 @@ public class NameFragment extends Fragment {
             TextInputEditText name = view.findViewById(R.id.name);
             btnContinua.setOnClickListener((View.OnClickListener) v -> {
                 if(name.getText().length() > 0){
-                    activity.getUser().setName(name.getText().toString());
+                    UserHelper.getInstance().setName(name.getText().toString());
                     Utilities.insertFragment((AppCompatActivity) activity, new AgeFragment(), "AGE_FRAGMENT");
                 }
             });

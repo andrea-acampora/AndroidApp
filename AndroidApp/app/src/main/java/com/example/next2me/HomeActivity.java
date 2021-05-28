@@ -1,19 +1,16 @@
 package com.example.next2me;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -23,12 +20,11 @@ import com.example.next2me.data.User;
 import com.example.next2me.utils.DatabaseHelper;
 import com.example.next2me.utils.Utilities;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
@@ -43,16 +39,27 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Button goToMap = findViewById(R.id.mappa);
-        goToMap.setOnClickListener((View.OnClickListener) v -> {
-            if(ContextCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                startActivity(new Intent(this, MapsActivity.class));
-            }else{
-                requestLocationPermission();
-            }
-        });
-        updateUI();
+        BottomNavigationView menu_nav = findViewById(R.id.menu_nav);
+        menu_nav.setOnNavigationItemSelectedListener(selectedListener);
+
     }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener selectedListener =
+            item -> {
+                switch(item.getItemId()){
+                    case R.id.nav_home:
+                        return  true;
+                    case R.id.nav_map:
+                        if(ContextCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                            startActivity(new Intent(this, MapsActivity.class));
+                        }else{
+                            requestLocationPermission();
+                        }
+                    case R.id.nav_profile:
+                        return true;
+                }
+                return false;
+            };
 
     private void requestLocationPermission() {
         if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {

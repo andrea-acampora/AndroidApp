@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.example.next2me.utils.UserHelper;
 import com.example.next2me.utils.Utilities;
 
 public class AgeFragment extends Fragment {
@@ -36,7 +37,7 @@ public class AgeFragment extends Fragment {
                     int month = date.getMonth();
                     int year =  date.getYear();
                     String birthdate = String.valueOf(year) + "-" + String.valueOf(month) + "-" + String.valueOf(day);
-                    activity.getUser().setBirthdate(birthdate);
+                    UserHelper.getInstance().setBirthdate(birthdate);
                     Utilities.insertFragment((AppCompatActivity) activity, new GenderFragment(), "GENDER_FRAGMENT");
                 }
             });

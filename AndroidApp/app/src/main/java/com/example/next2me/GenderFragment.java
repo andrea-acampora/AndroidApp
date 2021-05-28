@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.example.next2me.utils.UserHelper;
 import com.example.next2me.utils.Utilities;
 
 public class GenderFragment extends Fragment {
@@ -33,8 +34,8 @@ public class GenderFragment extends Fragment {
             btnContinua.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((RegistrationActivity) getActivity()).getUser().setGender("male");
-                    ((RegistrationActivity) getActivity()).getUser().setPreferences("F");
+                    UserHelper.getInstance().setGender("M");
+                    UserHelper.getInstance().setPreferences("F");
                     Utilities.insertFragment((AppCompatActivity) activity, new DescriptionFragment(), "DESCRIPTION_FRAGMENT");
                 }
             });
