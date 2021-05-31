@@ -56,7 +56,7 @@ public class HomeActivity extends AppCompatActivity {
                             requestLocationPermission();
                         }
                     case R.id.nav_profile:
-                        return true;
+                        startActivity(new Intent(this, ProfileActivity.class));
                 }
                 return false;
             };
@@ -81,7 +81,7 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    public void updateUI(){
+   /* public void updateUI(){
         String uid = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         DatabaseReference userTable = DatabaseHelper.getInstance().getDb().getReference("Users");
         userTable.child(uid).child("INFORMATIONS").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -113,7 +113,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
 
-    }
+    }*/
 
 
 
