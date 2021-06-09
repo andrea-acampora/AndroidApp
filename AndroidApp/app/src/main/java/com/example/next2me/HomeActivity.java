@@ -40,6 +40,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         BottomNavigationView menu_nav = findViewById(R.id.menu_nav);
+        menu_nav.setSelectedItemId(R.id.nav_home);
         menu_nav.setOnNavigationItemSelectedListener(selectedListener);
 
     }
@@ -48,15 +49,21 @@ public class HomeActivity extends AppCompatActivity {
             item -> {
                 switch(item.getItemId()){
                     case R.id.nav_home:
+                        Log.d("menu","home");
                         return  true;
                     case R.id.nav_map:
+                        Log.d("menu","map");
+
                         if(ContextCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
                             startActivity(new Intent(this, MapsActivity.class));
                         }else{
                             requestLocationPermission();
                         }
+                        break;
                     case R.id.nav_profile:
+                        Log.d("menu","profile");
                         startActivity(new Intent(this, ProfileActivity.class));
+                        break;
                 }
                 return false;
             };
