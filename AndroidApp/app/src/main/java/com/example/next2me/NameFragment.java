@@ -28,6 +28,7 @@ public class NameFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         final RegistrationActivity activity = (RegistrationActivity) getActivity();
         if(activity != null){
+            activity.increaseProgressBar(20);
             Button btnContinua = view.findViewById(R.id.buttonContinua);
             TextInputEditText name = view.findViewById(R.id.name);
             btnContinua.setOnClickListener((View.OnClickListener) v -> {

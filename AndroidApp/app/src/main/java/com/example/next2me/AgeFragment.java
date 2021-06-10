@@ -28,6 +28,7 @@ public class AgeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         final RegistrationActivity activity = (RegistrationActivity) getActivity();
         if(activity != null){
+            activity.increaseProgressBar(20);
             DatePicker date = view.findViewById(R.id.datePicker);
             Button btnContinua = view.findViewById(R.id.buttonContinua);
             btnContinua.setOnClickListener(new View.OnClickListener() {
