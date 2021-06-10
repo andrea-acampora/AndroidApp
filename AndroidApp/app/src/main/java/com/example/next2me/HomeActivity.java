@@ -33,13 +33,13 @@ import java.util.Objects;
 public class HomeActivity extends AppCompatActivity {
 
     private final int LOCATION_PERMISSION_CODE = 1;
-
+    BottomNavigationView menu_nav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        BottomNavigationView menu_nav = findViewById(R.id.menu_nav);
+        menu_nav = findViewById(R.id.menu_nav);
         menu_nav.setSelectedItemId(R.id.nav_home);
         menu_nav.setOnNavigationItemSelectedListener(selectedListener);
 
@@ -49,20 +49,24 @@ public class HomeActivity extends AppCompatActivity {
             item -> {
                 switch(item.getItemId()){
                     case R.id.nav_home:
-                        Log.d("menu","home");
-                        return  true;
+                        menu_nav.getMenu().getItem(0).setChecked(true);
+                        Utilities.insertFragment(this, new DashboardFragment(),"MATCH FRAGMENT");
+                        break;
                     case R.id.nav_map:
-                        Log.d("menu","map");
-
+                        menu_nav.getMenu().getItem(1).setChecked(true);
                         if(ContextCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                            startActivity(new Intent(this, MapsActivity.class));
+                            Utilities.insertFragment(this, new MapsFragment(),"MAP FRAGMENT");
                         }else{
                             requestLocationPermission();
                         }
                         break;
                     case R.id.nav_profile:
-                        Log.d("menu","profile");
-                        startActivity(new Intent(this, ProfileActivity.class));
+                        menu_nav.getMenu().getItem(2).setChecked(true);
+                        Utilities.insertFragment(this, new ProfileFragment(),"PROFILE FRAGMENT");
+                        break;
+                    case R.id.nav_matches:
+                        menu_nav.getMenu().getItem(3).setChecked(true);
+                        Utilities.insertFragment(this, new MatchFragment(),"MATCH FRAGMENT");
                         break;
                 }
                 return false;
@@ -81,7 +85,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_PERMISSION_CODE){
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                startActivity(new Intent(this, MapsActivity.class));
+                Utilities.insertFragment(this, new MapsFragment(),"MAP FRAGMENT");
             } else{
                 Log.d("pos","Permission denied");
             }
