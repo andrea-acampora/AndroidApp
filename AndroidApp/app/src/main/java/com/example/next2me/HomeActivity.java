@@ -51,7 +51,7 @@ public class HomeActivity extends AppCompatActivity {
                 switch(item.getItemId()){
                     case R.id.nav_home:
                         menu_nav.getMenu().getItem(0).setChecked(true);
-                        Utilities.insertFragment(this, new DashboardFragment(),"MATCH FRAGMENT");
+                        Utilities.insertFragment(this, new DashboardFragment(),"DASHBOARD FRAGMENT");
                         break;
                     case R.id.nav_map:
                         menu_nav.getMenu().getItem(1).setChecked(true);

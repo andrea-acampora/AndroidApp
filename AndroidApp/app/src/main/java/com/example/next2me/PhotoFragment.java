@@ -49,6 +49,7 @@ public class PhotoFragment extends Fragment {
         profilePic = view.findViewById(R.id.profilePic);
         final RegistrationActivity activity = (RegistrationActivity) getActivity();
         if(activity != null){
+            activity.increaseProgressBar(20);
             takePhoto = view.findViewById(R.id.camera);
             galleryPhoto = view.findViewById(R.id.galleria);
             btnContinua = view.findViewById(R.id.buttonContinua);

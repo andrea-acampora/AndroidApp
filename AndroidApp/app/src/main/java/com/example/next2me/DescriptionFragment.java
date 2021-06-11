@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,15 +29,13 @@ public class DescriptionFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         final RegistrationActivity activity = (RegistrationActivity) getActivity();
         if(activity != null){
+            activity.increaseProgressBar(20);
             Button btnContinua = view.findViewById(R.id.buttonContinua);
-            TextInputEditText description = view.findViewById(R.id.description);
-            btnContinua.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(description.getText().length() > 0){
-                        UserHelper.getInstance().setDescription(description.getText().toString());
-                        Utilities.insertFragment((AppCompatActivity) activity, new PhotoFragment(), "PHOTO_FRAGMENT");
-                    }
+            EditText description = view.findViewById(R.id.description);
+            btnContinua.setOnClickListener((View.OnClickListener) v -> {
+                if(description.getText().length() > 0){
+                    UserHelper.getInstance().setDescription(description.getText().toString());
+                    Utilities.insertFragment((AppCompatActivity) activity, new PhotoFragment(), "PHOTO_FRAGMENT");
                 }
             });
         }

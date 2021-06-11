@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Next2Me</string>
-    <string name="qual_il_tuo_nome">qual_il_tuo_nome</string>
-    <string name="inserisci_qui_il_tuo_vero_nome_per_essere_identificato_correttamente">inserisci_qui_il_tuo_vero_nome_per_essere_identificato_correttamente</string>
+    <string name="qual_il_tuo_nome">Qual è il tuo nome ?</string>
+    <string name="inserisci_qui_il_tuo_nome">Inserisci qui il tuo vero nome oppure un tuo soprannome</string>
     <string name="continua">continua</string>
     <string name="uomini">uomini</string>
     <string name="donne">donne</string>
@@ -10,18 +10,18 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="qual_la_tua_et">qual è la tua età</string>
-    <string name="nome">nome</string>
+    <string name="qual_la_tua_eta">Quando sei nato ?</string>
+    <string name="nome">Nome</string>
     <string name="qual_la_tua_data_di_nascita">qual è la tua data di nascita</string>
     <string name="desideri_incontrare">desideri incontrare...</string>
-    <string name="sei">sei...</string>
+    <string name="sei">Sei ...</string>
     <string name="bottonefemmina">bottoneFemmina</string>
     <string name="bottonemaschio">bottoneMaschio</string>
     <string name="fotocamera">fotocamera</string>
     <string name="galleria">galleria</string>
     <string name="profilepic">profilePic</string>
     <string name="parlaci_di_te_sappiamo_che_sei_una_persona_interessante">parlaci di te, sappiamo che sei una persona interessante! :)</string>
-    <string name="descrizione">descrizione</string>
+    <string name="descrizione">Descrizione</string>
     <string name="parlaci_di_te">Parlaci di te</string>
     <string name="sappiamo_che_sei_una_persona_interessante">sappiamo che sei una persona interessante</string>
     <string name="description">description</string>
@@ -34,4 +34,5 @@
     <string name="title_activity_maps">Map</string>
     <string name="janet_john">janet John</string>
     <string name="vai_alla_mappa">vai alla mappa</string>
+    <string name="ora_facci_vedere_chi_sei">Ora facci vedere chi sei !</string>
 </resources>
