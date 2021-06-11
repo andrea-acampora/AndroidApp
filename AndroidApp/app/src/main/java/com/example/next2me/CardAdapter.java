@@ -15,13 +15,13 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
+public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder> {
 
     private Context context;
     private List<String> names;
     private List<Integer> profilePic;
 
-    public MyAdapter(Context context, List<String> names, List<Integer> profilePic) {
+    public CardAdapter(Context context, List<String> names, List<Integer> profilePic) {
         this.context = context;
         this.names = names;
         this. profilePic = profilePic;
@@ -29,13 +29,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.grid_item, parent, false);
-        return new MyViewHolder(v);
+    public CardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(context).inflate(R.layout.card_layout, parent, false);
+        return new CardViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
         holder.textView.setText(names.get(position));
         holder.imageView.setImageResource(profilePic.get(position));
 
@@ -46,11 +46,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         return names.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
+    public static class CardViewHolder extends RecyclerView.ViewHolder{
 
         ImageView imageView;
         TextView textView;
-        public MyViewHolder(@NonNull View itemView) {
+        public CardViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageView);
             textView = itemView.findViewById(R.id.textView);

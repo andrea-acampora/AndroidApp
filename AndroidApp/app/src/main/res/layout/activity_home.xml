@@ -6,13 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
-    <include  android:id="@+id/prova" layout="@layout/top_app_bar" />
+
+    <include
+        android:id="@+id/prova"
+        layout="@layout/top_app_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
+        android:layout_width="410dp"
+        android:layout_height="556dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/menu_nav"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/prova"
+        app:layout_constraintVertical_bias="0.0" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/menu_nav"
@@ -20,7 +32,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="?android:attr/windowBackground"
-        app:layout_constraintBottom_toBottomOf="@+id/fragmentContainerView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/menu_nav" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
