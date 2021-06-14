@@ -13,15 +13,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.next2me.utils.DatabaseHelper;
+import com.google.firebase.storage.StorageReference;
+
 import java.util.List;
 
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder> {
 
     private Context context;
     private List<String> names;
-    private List<Integer> profilePic;
+    private List<String> profilePic;
 
-    public CardAdapter(Context context, List<String> names, List<Integer> profilePic) {
+    public CardAdapter(Context context, List<String> names, List<String> profilePic) {
         this.context = context;
         this.names = names;
         this. profilePic = profilePic;
@@ -37,7 +40,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     @Override
     public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
         holder.textView.setText(names.get(position));
-        holder.imageView.setImageResource(profilePic.get(position));
+        //holder.imageView.setImageResource(profilePic.get(position));
+        holder.setImage(profilePic.get(position));
 
     }
 
@@ -61,6 +65,13 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
                     Log.d("prova", "prova");
                 }
             });
+        }
+
+        public void setImage(String profilePicId){
+            StorageReference imageRef = DatabaseHelper.getInstance().getStorageRef().child("ProfilePictures/" + profilePicId + ".jpg");
+            GlideApp.with(itemView)
+                    .load(imageRef)
+                    .into(this.imageView);
         }
     }
 }
