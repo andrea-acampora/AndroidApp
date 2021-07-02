@@ -66,7 +66,8 @@ public class DatabaseHelper {
 
     public void SendUserPositionToDB(LatLng userPos){
         DatabaseReference userTable = db.getReference("Users");
-        userTable.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("POS").setValue(userPos);
+        userTable.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("POS").child("lat").setValue(userPos.latitude);
+        userTable.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("POS").child("long").setValue(userPos.longitude);
     }
 
 

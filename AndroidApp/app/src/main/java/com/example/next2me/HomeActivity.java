@@ -8,6 +8,8 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import com.example.next2me.data.User;
 import com.example.next2me.utils.DatabaseHelper;
 import com.example.next2me.utils.Utilities;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,6 +37,33 @@ public class HomeActivity extends AppCompatActivity {
 
     private final int LOCATION_PERMISSION_CODE = 1;
     BottomNavigationView menu_nav;
+    LocationManager locationManager;
+
+
+    LocationListener locationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(android.location.Location location) {
+            double latitude = location.getLatitude();
+            double longitude = location.getLongitude();
+            DatabaseHelper.getInstance().SendUserPositionToDB(new LatLng(latitude, longitude));
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +72,13 @@ public class HomeActivity extends AppCompatActivity {
         menu_nav = findViewById(R.id.menu_nav);
         menu_nav.setSelectedItemId(R.id.nav_home);
         menu_nav.setOnNavigationItemSelectedListener(selectedListener);
+        locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
         Utilities.insertFragment(this, new DashboardFragment(), "FRAGMENT_TAG");
+
 
     }
 
@@ -80,6 +116,8 @@ public class HomeActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE );
         }
     }
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
