@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.next2me.utils.DatabaseHelper;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -72,17 +73,24 @@ public class DashboardFragment extends Fragment {
                                 currentUserPos = new LatLng(location.getLatitude(), location.getLongitude());
                             });
                         }
-                    }catch (Exception e){
+                    } catch (Exception e){
                         e.printStackTrace();
                     }
 
-                    LatLng otherUserLoc = new LatLng((double)user.child("POS").child("lat").getValue(),(double)user.child("POS").child("long").getValue());
-                    double distance = SphericalUtil.computeDistanceBetween(currentUserPos, otherUserLoc);
-                    if (distance < 5000){
-                        names.add(user.child("INFORMATIONS").child("name").getValue().toString());
-                        profilePic.add(user.getKey());
-                    }
+                    Log.d("user" , user.getKey());
+                    Log.d("user" , FirebaseAuth.getInstance().getCurrentUser().getUid());
 
+                    if(!user.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                        if(user.hasChild("POS")){
+                            LatLng otherUserLoc = new LatLng((double)user.child("POS").child("lat").getValue(),(double)user.child("POS").child("long").getValue());
+                            double distance = SphericalUtil.computeDistanceBetween(currentUserPos, otherUserLoc);
+                            Log.d("user", "distante = " + distance);
+                            if (distance < 5000){
+                                names.add(user.child("INFORMATIONS").child("name").getValue().toString());
+                                profilePic.add(user.getKey());
+                            }
+                        }
+                    }
                 }
             }
             @Override
