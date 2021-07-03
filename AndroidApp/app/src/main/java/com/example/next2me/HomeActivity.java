@@ -46,11 +46,12 @@ public class HomeActivity extends AppCompatActivity {
             double latitude = location.getLatitude();
             double longitude = location.getLongitude();
             DatabaseHelper.getInstance().SendUserPositionToDB(new LatLng(latitude, longitude));
+            Log.d("pos", "lat = " + latitude);
         }
 
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {
-
+            Log.d("pos", "status changed");
         }
 
         @Override
@@ -72,14 +73,12 @@ public class HomeActivity extends AppCompatActivity {
         menu_nav = findViewById(R.id.menu_nav);
         menu_nav.setSelectedItemId(R.id.nav_home);
         menu_nav.setOnNavigationItemSelectedListener(selectedListener);
-        locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
         Utilities.insertFragment(this, new DashboardFragment(), "FRAGMENT_TAG");
-
-
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener selectedListener =
