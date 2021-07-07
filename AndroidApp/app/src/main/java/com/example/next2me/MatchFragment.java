@@ -61,8 +61,9 @@ public class MatchFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot data : dataSnapshot.getChildren()){
-                    MatchRequest match = data.getValue(MatchRequest.class);
-                    matches_list.add(match);
+                    Log.d("prova match",data.getValue().toString());
+                   // MatchRequest match = data.getValue(MatchRequest.class);
+                   // matches_list.add(match);
                 }
             }
             @Override
@@ -73,7 +74,7 @@ public class MatchFragment extends Fragment {
     }
 
     private void setRecyclerView(final Activity activity) {
-        recyclerView = getView().findViewById(R.id.recyclerView);
+        recyclerView = getView().findViewById(R.id.match_request_recycler_view);
         recyclerView.setHasFixedSize(false);
         matches_list = new ArrayList<>();
         adapter = new MatchRequestAdapter(activity,matches_list);
