@@ -2,6 +2,7 @@ package com.example.next2me;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,12 +11,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.next2me.utils.DatabaseHelper;
+import com.example.next2me.utils.Utilities;
+import com.example.next2me.viewmodel.CardItem;
+import com.example.next2me.viewmodel.ListViewModel;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -29,16 +39,19 @@ import java.util.List;
 
 import static android.content.Context.LOCATION_SERVICE;
 
-public class DashboardFragment extends Fragment {
+public class DashboardFragment extends Fragment implements OnItemListener{
 
     private RecyclerView recyclerView;
-    private List<String> names;
-    private List<String> profilePic;
+    private List<CardItem> cardItems;
     private CardAdapter adapter;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     private final int LOCATION_PERMISSION_CODE = 1;
     LocationManager locationManager;
     private LatLng currentUserPos = new LatLng(44.0575500,12.5652800);
+
+    private ListViewModel model;
+
 
 
     @Override
@@ -50,62 +63,84 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Log.d("frag", "created fragment");
-        // Inflate the layout for this fragment
-
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
-        names = new ArrayList<>();
-        profilePic = new ArrayList<>();
-        adapter = new CardAdapter(getActivity(), names, profilePic);
+        cardItems = new ArrayList<>();
+        adapter = new CardAdapter(getActivity(), cardItems, this);
+        swipeRefreshLayout = view.findViewById(R.id.swiperefresh);
 
-        DatabaseReference userTable = DatabaseHelper.getInstance().getDb().getReference("Users");
-        userTable.addListenerForSingleValueEvent(new ValueEventListener() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot user : dataSnapshot.getChildren()){
-                    try {
-                        locationManager = (LocationManager) getContext().getSystemService(LOCATION_SERVICE);
-                        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
-                        } else {
-                            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, location -> {
-                                currentUserPos = new LatLng(location.getLatitude(), location.getLongitude());
-                            });
-                        }
-                    } catch (Exception e){
-                        e.printStackTrace();
-                    }
-
-                    Log.d("user" , user.getKey());
-                    Log.d("user" , FirebaseAuth.getInstance().getCurrentUser().getUid());
-
-                    if(!user.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
-                        if(user.hasChild("POS")){
-                            LatLng otherUserLoc = new LatLng((double)user.child("POS").child("lat").getValue(),(double)user.child("POS").child("long").getValue());
-                            double distance = SphericalUtil.computeDistanceBetween(currentUserPos, otherUserLoc);
-                            Log.d("user", "distante = " + distance);
-                            if (distance < 5000){
-                                names.add(user.child("INFORMATIONS").child("name").getValue().toString());
-                                profilePic.add(user.getKey());
-                            }
-                        }
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("db","Error while reading data");
+            public void onRefresh() {
+                onCreateView(inflater, container, savedInstanceState);
             }
         });
+
+        LocationListener locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(android.location.Location location) {
+                currentUserPos = new LatLng(location.getLatitude(), location.getLongitude());
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+                Log.d("pos", "status changed");
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+                Log.d("pos", "provider enabled");
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+                Log.d("pos", "provider disabled");
+
+            }
+        };
+
+
+        try {
+            locationManager = (LocationManager) getContext().getSystemService(LOCATION_SERVICE);
+            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
+            } else {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setHasFixedSize(true);
 
         recyclerView.setAdapter(adapter);
-        return view;
 
+        model = new ViewModelProvider((ViewModelStoreOwner)getActivity()).get(ListViewModel.class);
+        model.getItems(currentUserPos).observe((LifecycleOwner) getActivity(), new Observer<List<CardItem>>() {
+            @Override
+            public void onChanged(List<CardItem> cardItems) {
+                Log.d("items", cardItems.toString());
+                adapter.setData(cardItems);
+            }
+        });
+        return view;
     }
+    @Override
+    public void onItemClick(int position) {
+        Log.d("prova", "ciaoo");
+        AppCompatActivity appCompatActivity = (AppCompatActivity) getActivity();
+        if (appCompatActivity != null) {
+            Log.d("prova", "ciaoo");
+            model.select(adapter.getItem(position));
+            Utilities.insertFragment(appCompatActivity, new DetailsFragment(),
+                    DetailsFragment.class.getSimpleName());
+        }
+    }
+
+
 
 }
