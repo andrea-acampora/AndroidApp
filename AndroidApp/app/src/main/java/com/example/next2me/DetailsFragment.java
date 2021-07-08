@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,12 +19,15 @@ import androidx.lifecycle.ViewModelStoreOwner;
 import com.example.next2me.utils.DatabaseHelper;
 import com.example.next2me.viewmodel.CardItem;
 import com.example.next2me.viewmodel.ListViewModel;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.StorageReference;
 
 public class DetailsFragment extends Fragment {
 
     private TextView name;
     private ImageView profilePic;
+    private ImageButton matchRequest;
+    private ListViewModel listViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,10 +47,11 @@ public class DetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         this.name = view.findViewById(R.id.nome);
         this.profilePic = view.findViewById(R.id.profile);
+        this.matchRequest = view.findViewById(R.id.matchRequest);
 
         Activity activity = getActivity();
         if (activity != null) {
-            ListViewModel listViewModel = new ViewModelProvider((ViewModelStoreOwner) activity).get(ListViewModel.class);
+            listViewModel = new ViewModelProvider((ViewModelStoreOwner) activity).get(ListViewModel.class);
             listViewModel.getSelected().observe(getViewLifecycleOwner(), new Observer<CardItem>() {
                 @Override
                 public void onChanged(CardItem cardItem) {
@@ -55,6 +60,15 @@ public class DetailsFragment extends Fragment {
                 }
             });
         }
+
+        this.matchRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatabaseHelper.getInstance().getDb().getReference("Users")
+                        .child(listViewModel.getSelected().getValue().getId())
+                        .child("MATCHES").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue("pending");
+            }
+        });
     }
 
     private void setImage(String profilePicId) {

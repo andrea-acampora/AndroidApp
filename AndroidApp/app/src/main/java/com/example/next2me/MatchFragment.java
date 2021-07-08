@@ -8,40 +8,48 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.next2me.data.MatchRequest;
+import com.example.next2me.data.User;
 import com.example.next2me.utils.DatabaseHelper;
+import com.example.next2me.utils.Utilities;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
 import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.LOCATION_SERVICE;
+import static android.content.Context.USB_SERVICE;
 
 public class MatchFragment extends Fragment {
 
     private MatchRequestAdapter adapter;
     private RecyclerView recyclerView;
-    private List<MatchRequest> matches_list;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,14 +64,36 @@ public class MatchFragment extends Fragment {
             setRecyclerView(activity);
         }
 
-        DatabaseReference matchesTable = DatabaseHelper.getInstance().getDb().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("MATCHES").child("PENDING");
-        matchesTable.addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference matchesTable = DatabaseHelper.getInstance().getDb().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("MATCHES");
+        matchesTable.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<MatchRequest> matches_list = new ArrayList<>();
+
                 for (DataSnapshot data : dataSnapshot.getChildren()){
-                    Log.d("prova match",data.getValue().toString());
-                   // MatchRequest match = data.getValue(MatchRequest.class);
-                   // matches_list.add(match);
+                    if(data.getValue().toString().equals("pending")){
+                        MatchRequest request = new MatchRequest();
+                        request.setUid(data.getKey());
+                        DatabaseHelper.getInstance().getDb().getReference("Users").child(data.getKey()).child("INFORMATIONS").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                request.setName(snapshot.child("name").getValue().toString());
+                                request.setAge(snapshot.child("birthdate").getValue().toString());
+
+                                matches_list.add(request);
+                                addToMatchesList(matches_list);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+                        // MatchRequest match = data.getValue(MatchRequest.class);
+                        // matches_list.add(match);
+                    }
+
                 }
             }
             @Override
@@ -75,9 +105,15 @@ public class MatchFragment extends Fragment {
 
     private void setRecyclerView(final Activity activity) {
         recyclerView = getView().findViewById(R.id.match_request_recycler_view);
-        recyclerView.setHasFixedSize(false);
-        matches_list = new ArrayList<>();
-        adapter = new MatchRequestAdapter(activity,matches_list);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setHasFixedSize(true);
+        adapter = new MatchRequestAdapter(activity);
         recyclerView.setAdapter(adapter);
     }
+
+    private void addToMatchesList(List<MatchRequest> matchRequestList){
+        adapter.addData(matchRequestList);
+    }
+
 }

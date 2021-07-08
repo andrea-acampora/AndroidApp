@@ -9,6 +9,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.next2me.utils.DatabaseHelper;
+import com.google.firebase.storage.StorageReference;
+
 public class MatchRequestViewHolder extends RecyclerView.ViewHolder {
 
     ImageView profilePic;
@@ -25,5 +28,12 @@ public class MatchRequestViewHolder extends RecyclerView.ViewHolder {
         this.age = itemView.findViewById(R.id.match_request_age);
         this.accept = itemView.findViewById(R.id.match_request_accept);
         this.decline = itemView.findViewById(R.id.match_request_decline);
+    }
+
+    public void setImage(String profilePicId) {
+        StorageReference imageRef = DatabaseHelper.getInstance().getStorageRef().child("ProfilePictures/" + profilePicId + ".jpg");
+        GlideApp.with(itemView)
+                .load(imageRef)
+                .into(this.profilePic);
     }
 }

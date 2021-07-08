@@ -129,6 +129,7 @@ public class DashboardFragment extends Fragment implements OnItemListener{
         });
         return view;
     }
+
     @Override
     public void onItemClick(int position) {
         Log.d("prova", "ciaoo");

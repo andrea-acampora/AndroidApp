@@ -70,8 +70,6 @@ public class DatabaseHelper {
         userTable.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("POS").child("long").setValue(userPos.longitude);
     }
 
-
-
     public FirebaseDatabase getDb() {
         return db;
     }
