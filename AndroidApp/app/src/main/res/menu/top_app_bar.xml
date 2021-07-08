@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/app_bar_switch"
+        android:background="@color/light_yellow"
+        android:backgroundTint="@color/light_yellow"
+        android:title="Active"
+        android:tooltipText="Attiva la posizione"
+        app:actionLayout="@layout/switch_item"
+        app:showAsAction="always" />
+</menu>

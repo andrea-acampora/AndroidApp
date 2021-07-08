@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -63,44 +64,8 @@ public class MatchFragment extends Fragment {
         if (activity != null){
             setRecyclerView(activity);
         }
+        this.showMatchesRequests();
 
-        DatabaseReference matchesTable = DatabaseHelper.getInstance().getDb().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("MATCHES");
-        matchesTable.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<MatchRequest> matches_list = new ArrayList<>();
-
-                for (DataSnapshot data : dataSnapshot.getChildren()){
-                    if(data.getValue().toString().equals("pending")){
-                        MatchRequest request = new MatchRequest();
-                        request.setUid(data.getKey());
-                        DatabaseHelper.getInstance().getDb().getReference("Users").child(data.getKey()).child("INFORMATIONS").addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                request.setName(snapshot.child("name").getValue().toString());
-                                request.setAge(snapshot.child("birthdate").getValue().toString());
-
-                                matches_list.add(request);
-                                addToMatchesList(matches_list);
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
-
-                        // MatchRequest match = data.getValue(MatchRequest.class);
-                        // matches_list.add(match);
-                    }
-
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("db","Error while reading data");
-            }
-        });
     }
 
     private void setRecyclerView(final Activity activity) {
@@ -114,6 +79,42 @@ public class MatchFragment extends Fragment {
 
     private void addToMatchesList(List<MatchRequest> matchRequestList){
         adapter.addData(matchRequestList);
+    }
+
+    private void showMatchesRequests(){
+        DatabaseReference matchesTable = DatabaseHelper.getInstance().getDb().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("MATCHES");
+        matchesTable.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<MatchRequest> matches_list = new ArrayList<>();
+
+                for (DataSnapshot data : dataSnapshot.getChildren()){
+                    if(data.getValue().toString().equals("pending")){
+                        MatchRequest request = new MatchRequest();
+                        request.setUid(data.getKey());
+                        DatabaseHelper.getInstance().getDb().getReference("Users").child(data.getKey()).child("INFORMATIONS").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                request.setName(snapshot.child("name").getValue().toString()+",");
+                                request.setAge(String.valueOf(Utilities.getAge(snapshot.child("birthdate").getValue().toString())));
+                                matches_list.add(request);
+                                addToMatchesList(matches_list);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("db","Error while reading data");
+            }
+        });
     }
 
 }
