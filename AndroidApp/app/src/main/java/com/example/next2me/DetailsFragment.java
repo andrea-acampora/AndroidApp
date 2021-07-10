@@ -16,10 +16,14 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
+import com.example.next2me.service.NotificationsHelper;
 import com.example.next2me.utils.DatabaseHelper;
 import com.example.next2me.viewmodel.CardItem;
 import com.example.next2me.viewmodel.ListViewModel;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
 public class DetailsFragment extends Fragment {
@@ -67,6 +71,22 @@ public class DetailsFragment extends Fragment {
                 DatabaseHelper.getInstance().getDb().getReference("Users")
                         .child(listViewModel.getSelected().getValue().getId())
                         .child("MATCHES").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue("pending");
+
+                DatabaseHelper.getInstance().getDb().getReference("Users")
+                        .child(listViewModel.getSelected().getValue().getId())
+                        .child("NOTIFICATIONS").child("token-id").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        String tokenId = snapshot.getValue(String.class);
+                        if(tokenId.length() > 0){
+                            NotificationsHelper.getInstance().sendNotifications(tokenId,"Nuova richiesta di amicizia!","Hai ricevuto una nuova richiesta di amicizia!");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {}
+                });
+
             }
         });
     }

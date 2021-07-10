@@ -19,9 +19,9 @@
         <ImageView
             android:id="@+id/match_request_profile_pic"
             android:layout_width="134dp"
-            android:layout_height="100dp"
+            android:layout_height="match_parent"
             android:paddingStart="0dp"
-            android:scaleType="fitCenter"
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/match_request_name"
             app:layout_constraintHorizontal_bias="0.0"

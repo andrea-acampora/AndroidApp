@@ -9,8 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.next2me.data.MatchRequest;
+import com.example.next2me.service.Data;
+import com.example.next2me.service.NotificationsHelper;
 import com.example.next2me.utils.DatabaseHelper;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +58,24 @@ public class MatchRequestAdapter extends RecyclerView.Adapter<MatchRequestViewHo
                 DatabaseHelper.getInstance().getDb().getReference("Users")
                         .child(matchRequest.getUid())
                         .child("MATCHES").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue("accepted");
+
+                DatabaseHelper.getInstance().getDb().getReference("Users")
+                                                                .child(matchRequest.getUid())
+                                                                .child("NOTIFICATIONS")
+                                                                .child("token-id").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        String tokenId = snapshot.getValue(String.class);
+                        if(tokenId.length() > 0 ){
+                            NotificationsHelper.getInstance().sendNotifications(tokenId,"Richiesta accettata!","La tua richiesta di amicizia è stata accettata!");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) { }
+                });
             }
+
         });
 
 

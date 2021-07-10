@@ -8,6 +8,7 @@ public class UserHelper {
 
     private User appUser;
     private Bitmap profilePic;
+    private String notificationsTokenId;
 
     private static UserHelper instance = null;
 
@@ -90,4 +91,11 @@ public class UserHelper {
         return profilePic;
     }
 
+    public String getNotificationsTokenId() {
+        return notificationsTokenId;
+    }
+
+    public void setNotificationsTokenId(String notificationsTokenId) {
+        this.notificationsTokenId = notificationsTokenId;
+    }
 }

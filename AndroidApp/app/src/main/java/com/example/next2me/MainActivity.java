@@ -12,12 +12,14 @@ import android.widget.TextView;
 
 import com.example.next2me.data.User;
 import com.example.next2me.utils.DatabaseHelper;
+import com.example.next2me.utils.UserHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+
 
 import java.util.Objects;
 
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
+            sendUserNotificationsTokenIdToServer(UserHelper.getInstance().getNotificationsTokenId());
             DatabaseReference userTable = DatabaseHelper.getInstance().getDb().getReference("Users");
             String uid = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
             userTable.child(uid).child("INFORMATIONS").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -55,6 +58,12 @@ public class MainActivity extends AppCompatActivity {
 
             loginButton.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, LoginActivity.class)));
             registerButton.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, SignUpActivity.class)));
+
+
         }
+    }
+
+    private void sendUserNotificationsTokenIdToServer(String tokenId) {
+        DatabaseHelper.getInstance().getDb().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("NOTIFICATIONS").child("token-id").setValue(tokenId);
     }
 }
