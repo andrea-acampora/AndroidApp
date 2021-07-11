@@ -19,15 +19,24 @@ import androidx.lifecycle.ViewModelStoreOwner;
 import com.example.next2me.utils.DatabaseHelper;
 import com.example.next2me.viewmodel.CardItem;
 import com.example.next2me.viewmodel.ListViewModel;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
 public class DetailsFragment extends Fragment {
 
     private TextView name;
+    private TextView descrizione;
+    private TextView genere;
     private ImageView profilePic;
     private ImageButton matchRequest;
     private ListViewModel listViewModel;
+    private TextView eta;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +57,10 @@ public class DetailsFragment extends Fragment {
         this.name = view.findViewById(R.id.nome);
         this.profilePic = view.findViewById(R.id.profile);
         this.matchRequest = view.findViewById(R.id.matchRequest);
+        this.descrizione = view.findViewById(R.id.descrizione);
+        this.genere = view.findViewById(R.id.genere);
+        this.eta = view.findViewById(R.id.eta);
+
 
         Activity activity = getActivity();
         if (activity != null) {
@@ -56,6 +69,22 @@ public class DetailsFragment extends Fragment {
                 @Override
                 public void onChanged(CardItem cardItem) {
                     name.setText(cardItem.getName());
+
+                    DatabaseReference reference = DatabaseHelper.getInstance().getDb().getReference("Users").child(cardItem.getId()).child("INFORMATIONS");
+                    reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            String descrizione = snapshot.child("description").getValue().toString();
+                            String genere = snapshot.child("gender").getValue().toString();
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
                     setImage(cardItem.getId());
                 }
             });

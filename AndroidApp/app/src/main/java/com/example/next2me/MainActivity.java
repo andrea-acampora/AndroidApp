@@ -23,7 +23,6 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,13 +45,10 @@ public class MainActivity extends AppCompatActivity {
                     Log.e("db","Error while reading data");
                 }
             });
-
         } else {
             setContentView(R.layout.activity_main);
-
             Button loginButton = findViewById(R.id.login_button);
             Button registerButton = findViewById(R.id.register_button);
-
             loginButton.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, LoginActivity.class)));
             registerButton.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, SignUpActivity.class)));
         }
