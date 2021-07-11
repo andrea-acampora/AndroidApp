@@ -28,6 +28,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class DetailsFragment extends Fragment {
 
     private TextView name;
@@ -75,9 +80,19 @@ public class DetailsFragment extends Fragment {
                     reference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            String descrizione = snapshot.child("description").getValue().toString();
-                            String genere = snapshot.child("gender").getValue().toString();
-
+                            String description = snapshot.child("description").getValue().toString();
+                            String gender = snapshot.child("gender").getValue().toString();
+                            String birthdate = snapshot.child("birthdate").getValue().toString();
+                            SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy/MM/dd");
+                            Date date = new Date();
+                            try {
+                               date = simpleDateFormat.parse(birthdate);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            descrizione.setText(description);
+                            genere.setText(gender);
+                            eta.setText(getAge(date.getYear(), date.getMonth(), date.getDay()));
                         }
 
                         @Override
@@ -122,5 +137,23 @@ public class DetailsFragment extends Fragment {
         GlideApp.with(getView())
                 .load(imageRef)
                 .into(this.profilePic);
+    }
+
+    private String getAge(int year, int month, int day){
+        Calendar dob = Calendar.getInstance();
+        Calendar today = Calendar.getInstance();
+
+        dob.set(year, month, day);
+
+        int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+
+        if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)){
+            age--;
+        }
+
+        Integer ageInt = new Integer(age);
+        String ageS = ageInt.toString();
+
+        return ageS;
     }
 }
