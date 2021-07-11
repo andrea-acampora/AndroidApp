@@ -1,8 +1,5 @@
 package com.example.next2me.service;
 
-
-
-
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Headers;
@@ -16,6 +13,6 @@ public interface APIService {
             }
     )
 
-    @POST("fcm/send")
+    @POST("https://fcm.googleapis.com/fcm/send")
     Call<MyResponse> sendNotifcation(@Body NotificationSender body);
 }

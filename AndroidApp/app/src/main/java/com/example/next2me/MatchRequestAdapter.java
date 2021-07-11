@@ -1,6 +1,7 @@
 package com.example.next2me;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,13 +60,13 @@ public class MatchRequestAdapter extends RecyclerView.Adapter<MatchRequestViewHo
                         .child(matchRequest.getUid())
                         .child("MATCHES").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue("accepted");
 
+
                 DatabaseHelper.getInstance().getDb().getReference("Users")
                                                                 .child(matchRequest.getUid())
-                                                                .child("NOTIFICATIONS")
-                                                                .child("token-id").addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                .child("NOTIFICATIONS").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String tokenId = snapshot.getValue(String.class);
+                        String tokenId = snapshot.child("token-id").getValue().toString();
                         if(tokenId.length() > 0 ){
                             NotificationsHelper.getInstance().sendNotifications(tokenId,"Richiesta accettata!","La tua richiesta di amicizia è stata accettata!");
                         }

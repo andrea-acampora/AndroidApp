@@ -11,6 +11,8 @@ public class myFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onNewToken(String token) {
+        //PROBLEMA------AGGIORNARE IL TOKEN NEL DB MA ANCORA NON HO LO UID DI FIREBASE
+        //SE LO SALVO QUI DOPO NON LO RIAGGIORNO NEL DB QUANDO ELIMINO I DATI
         UserHelper.getInstance().setNotificationsTokenId(token);
     }
 }
