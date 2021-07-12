@@ -1,5 +1,6 @@
 package com.example.next2me;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -17,6 +18,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
@@ -27,7 +29,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.next2me.data.User;
 import com.example.next2me.utils.DatabaseHelper;
 import com.example.next2me.utils.Utilities;
@@ -46,12 +55,16 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import static android.content.Context.LOCATION_SERVICE;
 
@@ -61,9 +74,10 @@ public class MapsFragment extends Fragment {
 
     private final int LOCATION_PERMISSION_CODE = 1;
     LocationManager locationManager;
-    private LatLng currentUserPos = new LatLng(44.0575500, 12.5652800);
     private List<String> matches = new ArrayList<>();
-    private HashMap<String, Marker> markers = new HashMap<>();
+    private HashMap<String, Marker> idMarkers = new HashMap<>();
+    private HashMap<Marker, String> markersId = new HashMap<>();
+    private Bitmap imageBitmap;
 
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
@@ -72,13 +86,22 @@ public class MapsFragment extends Fragment {
         public void onMapReady(GoogleMap googleMap) {
             mMap = googleMap;
             getAllMatches();
+
+            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(@NonNull Marker marker) {
+                    String uid = markersId.get(marker);
+
+                    return false;
+                }
+            });
         }
     };
 
-    /*
-    1. guardo tutti i matches accepted di una persona
-    2. per ogni id, aggiungo un listener (nel onCreate creo il marker)
-    */
+    private void setBitmap(Bitmap bitmap){
+        this.imageBitmap = Bitmap.createBitmap(bitmap);
+    }
+
 
     @Nullable
     @Override
@@ -131,20 +154,73 @@ public class MapsFragment extends Fragment {
                 if(snapshot.getKey().equals("POS")){
                     Double lat = snapshot.child("lat").getValue(Double.class);
                     Double lng = snapshot.child("long").getValue(Double.class);
-                    Log.d("match", "lat = " + lat);
-                    Log.d("match", "long = " + lng);
 
-                    MarkerOptions markerOptions = new MarkerOptions().position(new LatLng(lat, lng));
+                    StorageReference imageRef = DatabaseHelper.getInstance().getStorageRef().child("ProfilePictures").child(uid + ".jpg");
+                    imageRef.getBytes(1024*1024)
+                            .addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                                @Override
+                                public void onSuccess(byte[] bytes) {
+                                    Bitmap result = null;
+                                    try {
+                                        result = Bitmap.createBitmap(dp(70), dp(85), Bitmap.Config.ARGB_8888);
+                                        result.eraseColor(Color.TRANSPARENT);
+                                        Canvas canvas = new Canvas(result);
+                                        Drawable drawable;
+                                        drawable = ContextCompat.getDrawable(getActivity(), R.drawable.livepin);
 
-                    Bitmap bitmap = createUserBitmap();
-                    if (bitmap != null) {
-                        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+                                        drawable.setBounds(0, 0, dp(72), dp(88));
+                                        drawable.draw(canvas);
 
-                        Marker marker = mMap.addMarker(markerOptions);
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(currentUserPos));
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentUserPos, 12));
-                        markers.put(uid, marker);
-                    }
+                                        Paint roundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+                                        RectF bitmapRect = new RectF();
+                                        canvas.save();
+                                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                        if (bitmap != null) {
+                                            BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+                                            Matrix matrix = new Matrix();
+                                            float scale = dp(55) / (float) bitmap.getWidth();
+                                            matrix.postTranslate(dp(6), dp(6));
+                                            matrix.postScale(scale, scale);
+                                            roundPaint.setShader(shader);
+                                            shader.setLocalMatrix(matrix);
+                                            bitmapRect.set(dp(6), dp(6), dp(60 + 6), dp(60 + 6));
+                                            canvas.drawRoundRect(bitmapRect, dp(28), dp(28), roundPaint);
+                                        }
+                                        canvas.restore();
+                                        try {
+                                            canvas.setBitmap(null);
+                                        } catch (Exception e) {
+                                        }
+                                    } catch (Throwable t) {
+                                        t.printStackTrace();
+                                    }
+                                    Marker marker = mMap.addMarker(new MarkerOptions()
+                                            .position(new LatLng(lat, lng))
+                                            .icon(BitmapDescriptorFactory.fromBitmap(result)));
+                                    idMarkers.put(uid, marker);
+                                    markersId.put(marker, uid);
+                                }
+                            });
+
+                    DatabaseReference reference = DatabaseHelper.getInstance().getDb().getReference("Users").child(uid).child("POS");
+                    reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Double lat = (Double) snapshot.child("lat").getValue();
+                            Double lng = (Double) snapshot.child("long").getValue();
+                            LatLng currentUserPos = new LatLng(lat, lng);
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(currentUserPos));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentUserPos, 12));
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+
+
                 }
             }
 
@@ -154,7 +230,7 @@ public class MapsFragment extends Fragment {
                 if(snapshot.getKey().equals("POS")){
                     Double lat = (Double) snapshot.child("lat").getValue();
                     Double lng = (Double) snapshot.child("long").getValue();
-                    Marker marker = markers.get(uid);
+                    Marker marker = idMarkers.get(uid);
                     if (marker != null) {
                         marker.setPosition(new LatLng(lat, lng));
                     }
@@ -164,7 +240,7 @@ public class MapsFragment extends Fragment {
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
                 String id = snapshot.getKey();
-                Marker marker = markers.get(id);
+                Marker marker = idMarkers.get(uid);
                 if (marker != null) {
                     marker.remove();
                 }
@@ -176,49 +252,6 @@ public class MapsFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
-    }
-
-    private Bitmap createUserBitmap() {
-
-        Bitmap result = null;
-        try {
-            result = Bitmap.createBitmap(dp(62), dp(76), Bitmap.Config.ARGB_8888);
-            result.eraseColor(Color.TRANSPARENT);
-            Canvas canvas = new Canvas(result);
-            Drawable drawable;
-            drawable = ContextCompat.getDrawable(getActivity(), R.drawable.livepin);
-
-            drawable.setBounds(0, 0, dp(62), dp(76));
-            drawable.draw(canvas);
-
-            Paint roundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            RectF bitmapRect = new RectF();
-            canvas.save();
-
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.avatar);
-
-            //Bitmap bitmap = BitmapFactory.decodeFile(DatabaseHelper.getInstance().getStorageRef().child("ProfilePictures/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + ".jpg").getPath()); /*generate bitmap here if your image comes from any url*/
-//            Log.d("map", DatabaseHelper.getInstance().getStorageRef().child("ProfilePictures/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + ".jpg").getDownloadUrl().getResult().toString());
-            if (bitmap != null) {
-                BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-                Matrix matrix = new Matrix();
-                float scale = dp(52) / (float) bitmap.getWidth();
-                matrix.postTranslate(dp(5), dp(5));
-                matrix.postScale(scale, scale);
-                roundPaint.setShader(shader);
-                shader.setLocalMatrix(matrix);
-                bitmapRect.set(dp(5), dp(5), dp(52 + 5), dp(52 + 5));
-                canvas.drawRoundRect(bitmapRect, dp(26), dp(26), roundPaint);
-            }
-            canvas.restore();
-            try {
-                canvas.setBitmap(null);
-            } catch (Exception e) {
-            }
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }
-        return result;
     }
 
     public int dp(float value) {

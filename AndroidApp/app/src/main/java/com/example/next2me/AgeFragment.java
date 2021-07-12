@@ -1,6 +1,7 @@
 package com.example.next2me;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,10 +35,27 @@ public class AgeFragment extends Fragment {
             btnContinua.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int day = date.getDayOfMonth();
-                    int month = date.getMonth();
-                    int year =  date.getYear();
-                    String birthdate = String.valueOf(year) + "-" + String.valueOf(month) + "-" + String.valueOf(day);
+                    String day;
+                    String month;
+                    String year;
+                    if(date.getDayOfMonth() < 10){
+                        day = "0" + date.getDayOfMonth();
+                    }else{
+                        day = String.valueOf(date.getDayOfMonth());
+                    }
+
+                    if(date.getMonth() < 10){
+                        month = "0" + date.getDayOfMonth();
+                    }else{
+                        month = String.valueOf(date.getMonth());
+                    }
+
+
+                    year =  String.valueOf(date.getYear());
+                    String birthdate = day + "/" + month + "/" + year;
+                    Log.d("eta", "x = " + day);
+                    Log.d("eta", "x = " + month);
+                    Log.d("eta", "x = " + year);
                     UserHelper.getInstance().setBirthdate(birthdate);
                     Utilities.insertFragment((AppCompatActivity) activity, new GenderFragment(), "GENDER_FRAGMENT");
                 }
