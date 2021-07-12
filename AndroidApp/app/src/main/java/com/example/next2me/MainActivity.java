@@ -68,8 +68,10 @@ public class MainActivity extends AppCompatActivity {
         DatabaseHelper.getInstance().getDb().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("NOTIFICATIONS").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.child("token-id").getValue()==null){
+                if(snapshot.child("token-id").getValue()==null ){
                     DatabaseHelper.getInstance().getDb().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("NOTIFICATIONS").child("token-id").setValue(tokenId);
+                }else if(snapshot.child("token-id").getValue().toString().length() > 0 && snapshot.child("token-id").getValue() != UserHelper.getInstance().getNotificationsTokenId() && UserHelper.getInstance().getNotificationsTokenId() != null){
+                    DatabaseHelper.getInstance().getDb().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("NOTIFICATIONS").child("token-id").setValue(UserHelper.getInstance().getNotificationsTokenId());
                 }
             }
 

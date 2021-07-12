@@ -9,10 +9,10 @@ public interface APIService {
     @Headers(
             {
                     "Content-Type:application/json",
-                    "Authorization:key=AAAA0gXTowU:APA91bE9tS47rqya60zyBFcfHJmbQKlZbiz-vQDxZkF9eMJuaN1EnbZsbY3buJHMYnjpuBeEJt-Q5m4b2xArNdgU1Zl0eJWWbJ1x-G1288iXybvPjMEg-00uLMCr1n4xlCdKdnAW8r-w"
+                    "Authorization:key=AAAA0gXTowU:APA91bFlZUZmjPJXmn26Ugpzl-lyaQ3f0b3DexOolartQSgAStlKSo6Tlwuu3I06lHZPXaZP6GqjJ1Fia9SxbXb4QTUXT59IZdtyjyQpoqvbdgjqhcjvSHaafr0XPi7nr_5imwibVw6X"
             }
     )
 
-    @POST("https://fcm.googleapis.com/fcm/send")
+    @POST("fcm/send")
     Call<MyResponse> sendNotifcation(@Body NotificationSender body);
 }

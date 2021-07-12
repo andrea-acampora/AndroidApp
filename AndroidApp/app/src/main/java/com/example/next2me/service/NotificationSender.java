@@ -1,11 +1,12 @@
 package com.example.next2me.service;
 
 public class NotificationSender {
-    public Data data;
+
+    public Notification notification;
     public String to;
 
-    public NotificationSender(Data data, String to) {
-        this.data = data;
+    public NotificationSender(Notification notification, String to) {
+        this.notification = notification;
         this.to = to;
     }
 
