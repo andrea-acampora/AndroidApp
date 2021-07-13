@@ -1,7 +1,6 @@
 package com.example.next2me;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.next2me.data.MatchRequest;
-import com.example.next2me.service.Data;
 import com.example.next2me.service.NotificationsHelper;
 import com.example.next2me.utils.DatabaseHelper;
 import com.google.firebase.auth.FirebaseAuth;

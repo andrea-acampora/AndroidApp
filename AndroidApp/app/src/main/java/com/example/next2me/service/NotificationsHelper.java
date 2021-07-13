@@ -1,7 +1,6 @@
 package com.example.next2me.service;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -22,15 +21,14 @@ public class NotificationsHelper {
     }
 
     public void sendNotifications(String userToken, String title, String message) {
-        Log.d("notif",userToken);
-        Data data = new Data(title, message);
-        NotificationSender sender = new NotificationSender(data, userToken);
+        Notification notification = new Notification(title, message);
+        NotificationSender sender = new NotificationSender(notification, userToken);
         apiService.sendNotifcation(sender).enqueue(new Callback<MyResponse>() {
             @Override
             public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
                 if (response.code() == 200) {
                     if (response.body().success != 1) {
-                        Log.d("notif","erroe");
+                        Log.d("notif",response.toString());
                     }
                 }
             }

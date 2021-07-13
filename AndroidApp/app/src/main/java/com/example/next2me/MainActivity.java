@@ -60,17 +60,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sendUserNotificationsTokenIdToServer(String tokenId) {
-
-        DatabaseHelper.getInstance().getDb().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("NOTIFICATIONS").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.child("token-id").getValue()==null){
-                    DatabaseHelper.getInstance().getDb().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("NOTIFICATIONS").child("token-id").setValue(tokenId);
+        if(tokenId!=null){
+            DatabaseHelper.getInstance().getDb().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("NOTIFICATIONS").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.child("token-id").getValue()==null ){
+                        DatabaseHelper.getInstance().getDb().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("NOTIFICATIONS").child("token-id").setValue(tokenId);
+                    }else if(snapshot.child("token-id").getValue().toString().length() > 0 && snapshot.child("token-id").getValue() != tokenId ){
+                        DatabaseHelper.getInstance().getDb().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("NOTIFICATIONS").child("token-id").setValue(tokenId);
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {            }
+            });
+        }
+
+
     }
 }
