@@ -37,9 +37,8 @@ public class myFirebaseMessagingService extends FirebaseMessagingService {
         Intent intent = new Intent(this, HomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-        Log.d("notif","notifica ricevuta " +remoteMessage.getNotification());
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"CHANNEL_ID")
-                                                                    .setSmallIcon(R.drawable.ic_stat_ic_notification)
+                                                                    .setSmallIcon(R.mipmap.ic_launcher)
                                                                     .setContentTitle(remoteMessage.getNotification().getTitle())
                                                                     .setContentText(remoteMessage.getNotification().getBody())
                                                                     .setPriority(NotificationCompat.PRIORITY_MAX)
