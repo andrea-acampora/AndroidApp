@@ -1,7 +1,9 @@
 package com.example.next2me;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -20,18 +23,30 @@ import com.example.next2me.service.NotificationsHelper;
 import com.example.next2me.utils.DatabaseHelper;
 import com.example.next2me.viewmodel.CardItem;
 import com.example.next2me.viewmodel.ListViewModel;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Calendar;
+import java.util.Date;
 
 public class DetailsFragment extends Fragment {
 
     private TextView name;
+    private TextView descrizione;
+    private TextView genere;
     private ImageView profilePic;
     private ImageButton matchRequest;
     private ListViewModel listViewModel;
+    private TextView eta;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,6 +67,10 @@ public class DetailsFragment extends Fragment {
         this.name = view.findViewById(R.id.nome);
         this.profilePic = view.findViewById(R.id.profile);
         this.matchRequest = view.findViewById(R.id.matchRequest);
+        this.descrizione = view.findViewById(R.id.descrizione);
+        this.genere = view.findViewById(R.id.genere);
+        this.eta = view.findViewById(R.id.eta);
+
 
         Activity activity = getActivity();
         if (activity != null) {
@@ -60,6 +79,42 @@ public class DetailsFragment extends Fragment {
                 @Override
                 public void onChanged(CardItem cardItem) {
                     name.setText(cardItem.getName());
+
+                    DatabaseReference reference = DatabaseHelper.getInstance().getDb().getReference("Users").child(cardItem.getId()).child("INFORMATIONS");
+                    reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @RequiresApi(api = Build.VERSION_CODES.O)
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            String description = snapshot.child("description").getValue().toString();
+                            String gender = snapshot.child("gender").getValue().toString();
+                            String birthdate = snapshot.child("birthdate").getValue().toString();
+                            descrizione.setText(description);
+                            genere.setText(gender);
+
+
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                            Date d = null;
+                            try {
+                                d = sdf.parse(birthdate);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            Calendar c = Calendar.getInstance();
+                            c.setTime(d);
+                            int year = c.get(Calendar.YEAR);
+                            int month = c.get(Calendar.MONTH) + 1;
+                            int day = c.get(Calendar.DAY_OF_MONTH);
+
+                            eta.setText(getAge(year, month, day));
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
                     setImage(cardItem.getId());
                 }
             });
@@ -96,5 +151,23 @@ public class DetailsFragment extends Fragment {
         GlideApp.with(getView())
                 .load(imageRef)
                 .into(this.profilePic);
+    }
+
+    private String getAge(int year, int month, int day){
+        Calendar dob = Calendar.getInstance();
+        Calendar today = Calendar.getInstance();
+
+        dob.set(year, month, day);
+
+        int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+
+        if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)){
+            age--;
+        }
+
+        Integer ageInt = new Integer(age);
+        String ageS = ageInt.toString();
+
+        return ageS;
     }
 }

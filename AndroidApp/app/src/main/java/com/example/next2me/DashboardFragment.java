@@ -90,16 +90,13 @@ public class DashboardFragment extends Fragment implements OnItemListener{
             @Override
             public void onProviderEnabled(String provider) {
                 Log.d("pos", "provider enabled");
-
             }
 
             @Override
             public void onProviderDisabled(String provider) {
                 Log.d("pos", "provider disabled");
-
             }
         };
-
 
         try {
             locationManager = (LocationManager) getContext().getSystemService(LOCATION_SERVICE);
@@ -111,7 +108,6 @@ public class DashboardFragment extends Fragment implements OnItemListener{
         } catch (Exception e){
             e.printStackTrace();
         }
-
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -132,16 +128,11 @@ public class DashboardFragment extends Fragment implements OnItemListener{
 
     @Override
     public void onItemClick(int position) {
-        Log.d("prova", "ciaoo");
         AppCompatActivity appCompatActivity = (AppCompatActivity) getActivity();
         if (appCompatActivity != null) {
-            Log.d("prova", "ciaoo");
             model.select(adapter.getItem(position));
             Utilities.insertFragment(appCompatActivity, new DetailsFragment(),
                     DetailsFragment.class.getSimpleName());
         }
     }
-
-
-
 }
