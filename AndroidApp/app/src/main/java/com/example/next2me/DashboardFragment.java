@@ -2,6 +2,7 @@ package com.example.next2me;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Canvas;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -110,8 +111,9 @@ public class DashboardFragment extends Fragment implements OnItemListener{
         }
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false);
+
         recyclerView.setLayoutManager(gridLayoutManager);
-        recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(false);
 
         recyclerView.setAdapter(adapter);
 

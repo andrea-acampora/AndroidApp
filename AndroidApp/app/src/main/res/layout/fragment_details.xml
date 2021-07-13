@@ -5,70 +5,76 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <ImageView
         android:id="@+id/profile"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="33dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="33dp"
-        android:layout_marginBottom="38dp"
-        app:layout_constraintBottom_toTopOf="@+id/nome"
+        android:layout_width="370dp"
+        android:layout_height="384dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="58dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/eta"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/eta"
+        android:id="@+id/genere"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="22dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="28dp"
         android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/matchRequest"
-        app:layout_constraintStart_toStartOf="@+id/genere"
+        app:layout_constraintBottom_toTopOf="@+id/nome"
+        app:layout_constraintStart_toStartOf="@+id/eta"
+        app:layout_constraintTop_toBottomOf="@+id/eta" />
+
+    <TextView
+        android:id="@+id/nome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="23dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/descrizione"
+        app:layout_constraintStart_toStartOf="@+id/descrizione"
         app:layout_constraintTop_toBottomOf="@+id/genere" />
 
     <TextView
         android:id="@+id/descrizione"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="19dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="39dp"
         android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/genere"
-        app:layout_constraintStart_toStartOf="@+id/nome"
+        app:layout_constraintBottom_toTopOf="@+id/matchRequest"
+        app:layout_constraintEnd_toEndOf="@+id/matchRequest"
         app:layout_constraintTop_toBottomOf="@+id/nome" />
 
     <TextView
-        android:id="@+id/genere"
+        android:id="@+id/eta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="22dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
         android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/eta"
-        app:layout_constraintStart_toStartOf="@+id/descrizione"
-        app:layout_constraintTop_toBottomOf="@+id/descrizione" />
-
-    <TextView
-        android:id="@+id/nome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="23dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/descrizione"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/genere"
+        app:layout_constraintStart_toStartOf="@+id/nome"
         app:layout_constraintTop_toBottomOf="@+id/profile" />
 
     <ImageButton
         android:id="@+id/matchRequest"
-        android:layout_width="96dp"
-        android:layout_height="70dp"
+        android:layout_width="97dp"
+        android:layout_height="56dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eta"
+        app:layout_constraintTop_toBottomOf="@+id/descrizione"
         app:srcCompat="@drawable/ic_matches_accept" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -91,7 +91,6 @@ public class MapsFragment extends Fragment {
                 @Override
                 public boolean onMarkerClick(@NonNull Marker marker) {
                     String uid = markersId.get(marker);
-
                     return false;
                 }
             });

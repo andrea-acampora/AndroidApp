@@ -4,10 +4,12 @@ public class CardItem {
 
     private String id;
     private String name;
+    private String birthday;
 
-    public CardItem(String name, String id) {
+    public CardItem(String name, String id, String birthday) {
         this.id = id;
         this.name = name;
+        this.birthday = birthday;
     }
 
     public String getName() {
@@ -24,5 +26,13 @@ public class CardItem {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
     }
 }
