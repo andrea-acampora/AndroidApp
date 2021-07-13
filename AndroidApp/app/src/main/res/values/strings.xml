@@ -35,4 +35,7 @@
     <string name="janet_john">janet John</string>
     <string name="vai_alla_mappa">vai alla mappa</string>
     <string name="ora_facci_vedere_chi_sei">Ora facci vedere chi sei !</string>
+    <string name="message_hint">Enter your message</string>
+    <string name="Enter_your_message_here">Enter your message here</string>
+    <string name="button">Button</string>
 </resources>
