@@ -117,10 +117,35 @@ public class SingleChatActivity extends AppCompatActivity {
                         list.add(new MessageWrapper((TextMessage) message));
                     }
                 }
+                adapter.addToEnd(list, true);
             }
             @Override
             public void onError(CometChatException e){ }
             });
+
+
+        int latestId = CometChat.getLastDeliveredMessageId();
+        MessagesRequest messagesRequest2 = new MessagesRequest.MessagesRequestBuilder().setMessageId(latestId).setUID(receiverId).build();
+
+        messagesRequest.fetchNext(new CometChat.CallbackListener<List<BaseMessage>>() {
+            @Override
+            public void onSuccess(List <BaseMessage> messages) {
+                List<IMessage> list = new ArrayList<>();
+                for (BaseMessage message : messages) {
+                    Log.d("chat", "mess = " + message.toString());
+                    if (message instanceof TextMessage) {
+                        list.add(new MessageWrapper((TextMessage) message));
+                    }
+                }
+                adapter.addToEnd(list, true);
+            }
+            @Override
+            public void onError(CometChatException e) {
+                Log.d("chat", "Message fetching failed with exception: " + e.getMessage());
+            }
+        });
+
+
 
     }
 
