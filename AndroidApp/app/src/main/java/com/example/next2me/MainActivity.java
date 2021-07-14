@@ -10,7 +10,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.cometchat.pro.core.AppSettings;
+import com.cometchat.pro.core.CometChat;
+import com.cometchat.pro.exceptions.CometChatException;
 import com.example.next2me.data.User;
+import com.example.next2me.utils.ChatConstants;
 import com.example.next2me.utils.DatabaseHelper;
 import com.example.next2me.utils.UserHelper;
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,9 +58,21 @@ public class MainActivity extends AppCompatActivity {
             Button registerButton = findViewById(R.id.register_button);
             loginButton.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, LoginActivity.class)));
             registerButton.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, SignUpActivity.class)));
-
-
         }
+
+        initCometChat();
+    }
+
+    private void initCometChat() {
+        AppSettings appSettings=new AppSettings.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(ChatConstants.REGION).build();
+        CometChat.init(this, ChatConstants.APP_ID, appSettings, new CometChat.CallbackListener<String>() {
+            @Override
+            public void onSuccess(String s) {}
+
+            @Override
+            public void onError(CometChatException e) {}
+        });
+
     }
 
     private void sendUserNotificationsTokenIdToServer(String tokenId) {

@@ -17,6 +17,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.cometchat.pro.core.CometChat;
+import com.cometchat.pro.exceptions.CometChatException;
+import com.cometchat.pro.models.User;
+import com.example.next2me.utils.ChatConstants;
 import com.example.next2me.utils.DatabaseHelper;
 import com.example.next2me.utils.UserHelper;
 import com.example.next2me.utils.Utilities;
@@ -63,6 +67,7 @@ public class PhotoFragment extends Fragment {
                     DatabaseHelper dbh = DatabaseHelper.getInstance();
                     dbh.addPhotoToStorage(UserHelper.getInstance().getProfilePic(), FirebaseAuth.getInstance().getCurrentUser().getUid());
                     dbh.addUserToDB(UserHelper.getInstance().getAppUser());
+                    registerUserInCometChat(); 
                     startActivity(new Intent(getActivity(), HomeActivity.class));
                 }
             });
@@ -83,6 +88,24 @@ public class PhotoFragment extends Fragment {
 
 
         }
+    }
+
+    private void registerUserInCometChat() {
+        User user = new User();
+        user.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        user.setName(UserHelper.getInstance().getAppUser().getName());
+
+        CometChat.createUser(user, ChatConstants.API_KEY, new CometChat.CallbackListener<User>() {
+            @Override
+            public void onSuccess(User user) {
+                Log.d("createUser", user.toString());
+            }
+
+            @Override
+            public void onError(CometChatException e) {
+                Log.e("createUser", e.getMessage());
+            }
+        });
     }
 
     private void takePictureFromGallery() {

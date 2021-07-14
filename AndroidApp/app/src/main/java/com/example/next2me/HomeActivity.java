@@ -95,8 +95,14 @@ public class HomeActivity extends AppCompatActivity {
                         menu_nav.getMenu().getItem(2).setChecked(true);
                         Utilities.insertFragment(this, new ProfileFragment(),"PROFILE FRAGMENT");
                         break;
-                    case R.id.nav_matches:
+
+                    case R.id.nav_chat:
                         menu_nav.getMenu().getItem(3).setChecked(true);
+                        Utilities.insertFragment(this, new ChatFragment(),"CHAT FRAGMENT");
+                        break;
+
+                    case R.id.nav_matches:
+                        menu_nav.getMenu().getItem(4).setChecked(true);
                         Utilities.insertFragment(this, new MatchFragment(),"MATCH FRAGMENT");
                         break;
                 }
@@ -155,12 +161,5 @@ public class HomeActivity extends AppCompatActivity {
                 Log.e("db","Error while reading data");
             }
         });
-
-
     }*/
-
-
-
-
-
 }
