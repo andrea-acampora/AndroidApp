@@ -18,7 +18,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.next2me.data.User;
+import com.cometchat.pro.core.CometChat;
+import com.cometchat.pro.exceptions.CometChatException;
+import com.cometchat.pro.models.User;
+import com.example.next2me.utils.ChatConstants;
 import com.example.next2me.utils.DatabaseHelper;
 import com.example.next2me.utils.Utilities;
 import com.google.android.gms.maps.model.LatLng;
@@ -69,11 +72,27 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ChatLogIn();
         setContentView(R.layout.activity_home);
         menu_nav = findViewById(R.id.menu_nav);
         menu_nav.setSelectedItemId(R.id.nav_home);
         menu_nav.setOnNavigationItemSelectedListener(selectedListener);
         Utilities.insertFragment(this, new DashboardFragment(), "FRAGMENT_TAG");
+    }
+
+    private void ChatLogIn() {
+        if (CometChat.getLoggedInUser() == null) {
+            CometChat.login(FirebaseAuth.getInstance().getCurrentUser().getUid(), ChatConstants.API_KEY, new CometChat.CallbackListener<com.cometchat.pro.models.User>() {
+
+                @Override
+                public void onSuccess(User user) {
+                }
+
+                @Override
+                public void onError(CometChatException e) {
+                }
+            });
+        }
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener selectedListener =

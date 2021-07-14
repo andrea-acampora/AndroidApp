@@ -1,6 +1,7 @@
 package com.example.next2me;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,8 @@ public class MatchRequestAdapter extends RecyclerView.Adapter<MatchRequestViewHo
         holder.accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sendMessage("Ciao, ho accettato la tua richiesta", matchRequest.getUid());
+
                 DatabaseHelper.getInstance().getDb().getReference("Users")
                         .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                         .child("MATCHES").child(matchRequest.getUid()).setValue("accepted");
@@ -77,8 +80,6 @@ public class MatchRequestAdapter extends RecyclerView.Adapter<MatchRequestViewHo
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) { }
                 });
-
-                sendMessage("Ciao, ho accettato la tua richiesta", matchRequest.getUid());
             }
 
         });
@@ -98,12 +99,14 @@ public class MatchRequestAdapter extends RecyclerView.Adapter<MatchRequestViewHo
         String receiverID = receiverId;
         String messageText = message;
         String receiverType = CometChatConstants.RECEIVER_TYPE_USER;
+        Log.d("mess", "messaggio da inviare a " + receiverID);
 
         TextMessage textMessage = new TextMessage(receiverID, messageText, receiverType);
 
         CometChat.sendMessage(textMessage, new CometChat.CallbackListener <TextMessage> () {
             @Override
             public void onSuccess(TextMessage textMessage) {
+                Log.d("mess", "messaggio inviato");
             }
             @Override
             public void onError(CometChatException e) {
