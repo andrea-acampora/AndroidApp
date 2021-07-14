@@ -1,7 +1,6 @@
 package com.example.next2me.models;
 
 import com.cometchat.pro.models.TextMessage;
-import com.example.next2me.UserChatWrapper;
 import com.stfalcon.chatkit.commons.models.IMessage;
 import com.stfalcon.chatkit.commons.models.IUser;
 

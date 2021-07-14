@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -24,7 +25,9 @@ import com.example.next2me.utils.ChatConstants;
 import com.example.next2me.utils.DatabaseHelper;
 import com.example.next2me.utils.UserHelper;
 import com.example.next2me.utils.Utilities;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
 import static android.app.Activity.RESULT_OK;
@@ -94,6 +97,12 @@ public class PhotoFragment extends Fragment {
         User user = new User();
         user.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
         user.setName(UserHelper.getInstance().getAppUser().getName());
+        DatabaseHelper.getInstance().getStorageRef().child("ProfilePictures").child(FirebaseAuth.getInstance().getCurrentUser().getUid() + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                user.setAvatar(uri.toString());
+            }
+        });
 
         CometChat.createUser(user, ChatConstants.API_KEY, new CometChat.CallbackListener<User>() {
             @Override

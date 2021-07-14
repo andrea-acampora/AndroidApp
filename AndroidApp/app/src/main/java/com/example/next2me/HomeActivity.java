@@ -98,7 +98,7 @@ public class HomeActivity extends AppCompatActivity {
 
                     case R.id.nav_chat:
                         menu_nav.getMenu().getItem(3).setChecked(true);
-                        Utilities.insertFragment(this, new ChatFragment(),"CHAT FRAGMENT");
+                        Utilities.insertFragment(this, new ChatListFragment(),"CHAT FRAGMENT");
                         break;
 
                     case R.id.nav_matches:

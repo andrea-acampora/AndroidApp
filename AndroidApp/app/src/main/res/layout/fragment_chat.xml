@@ -5,11 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".ChatFragment">
 
-    <Button
+    <!--<Button
         android:id="@+id/butt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button" />
+        android:text="@string/button" />-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatsListRV"

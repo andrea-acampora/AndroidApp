@@ -52,13 +52,13 @@ public class ChatFragment extends Fragment {
         initViews();
         getChatList();
 
-        Button button = getView().findViewById(R.id.butt);
+        /*Button button = getView().findViewById(R.id.butt);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SingleChatActivity.start(getContext(), "djx5yqtt3cyrcbnxclphww5b22r2");
             }
-        });
+        });*/
     }
 
 

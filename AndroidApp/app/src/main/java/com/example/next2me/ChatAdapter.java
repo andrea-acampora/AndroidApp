@@ -16,6 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cometchat.pro.core.CometChat;
 import com.cometchat.pro.models.AppEntity;
 import com.cometchat.pro.models.Conversation;
+import com.cometchat.pro.models.TextMessage;
+import com.cometchat.pro.models.User;
+import com.example.next2me.models.MessageWrapper;
 
 import java.util.List;
 
@@ -53,26 +56,27 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     public class ChatViewHolder extends RecyclerView.ViewHolder {
 
         TextView chatName;
-        FrameLayout containerLayout;
+        FrameLayout frameLayout;
+        //TextView unreadBubble;
+        TextView lastMessage;
 
         public ChatViewHolder(@NonNull View itemView) {
             super(itemView);
-            chatName = itemView.findViewById(R.id.chatNameTV);
-            containerLayout = itemView.findViewById(R.id.containerLayout);
+            chatName = itemView.findViewById(R.id.dialogName);
+            frameLayout = itemView.findViewById(R.id.dialogRootLayout);
+          //  unreadBubble = itemView.findViewById(R.id.dialogUnreadBubble);
+            lastMessage = itemView.findViewById(R.id.dialogLastMessage);
         }
 
         public void bind(Conversation conversation){
-            chatName.setText(conversation.getConversationId());
-            String convId = conversation.getConversationId();
-            String[] parts = convId.split("_");
-            String receiverId;
-            if(parts[2].equals(CometChat.getLoggedInUser().getUid())){
-                receiverId = parts[0];
-            }else{
-                receiverId = parts[2];
-            }
-            Log.d("chat", "conv with = " + receiverId);
-            containerLayout.setOnClickListener(itemView -> SingleChatActivity.start(context, receiverId));
+
+            User receiver = (User) conversation.getConversationWith();
+            String receiverId = receiver.getUid();
+            Log.d("chat", "receiverId = " + receiverId);
+            chatName.setText(receiver.getName());
+         //   unreadBubble.setText(conversation.getUnreadMessageCount());
+            lastMessage.setText(new MessageWrapper((TextMessage)conversation.getLastMessage()).getText());
+            frameLayout.setOnClickListener(itemView -> SingleChatActivity.start(context, receiverId));
         }
     }
 }

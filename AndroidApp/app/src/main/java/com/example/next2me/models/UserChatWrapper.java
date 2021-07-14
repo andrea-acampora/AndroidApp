@@ -1,4 +1,4 @@
-package com.example.next2me;
+package com.example.next2me.models;
 
 import com.cometchat.pro.models.User;
 import com.stfalcon.chatkit.commons.models.IUser;
