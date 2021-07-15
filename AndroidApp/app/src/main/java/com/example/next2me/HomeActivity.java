@@ -80,6 +80,7 @@ public class HomeActivity extends AppCompatActivity {
         menu_nav = findViewById(R.id.menu_nav);
         menu_nav.setSelectedItemId(R.id.nav_home);
         menu_nav.setOnNavigationItemSelectedListener(selectedListener);
+        
         Utilities.insertFragment(this, new DashboardFragment(), "FRAGMENT_TAG");
     }
 
