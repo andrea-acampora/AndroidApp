@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#00FFFFFF"
     android:textAlignment="center"
     tools:context=".ProfileFragment">
 
@@ -44,14 +45,13 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
-
         <ImageView
             android:id="@+id/profile_pic_fragment_profile"
             android:layout_width="161dp"
             android:layout_height="169dp"
-            android:scaleType="centerCrop"
             android:layout_centerHorizontal="true"
             android:baselineAlignBottom="false"
+            android:scaleType="centerCrop"
             android:src="@drawable/avatar" />
     </RelativeLayout>
 
@@ -111,28 +111,27 @@
         android:id="@+id/fragment_profile_button_logout"
         android:layout_width="176dp"
         android:layout_height="56dp"
-        android:layout_marginTop="88dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="70dp"
         android:drawableLeft="@drawable/ic_stat_ic_logout"
         android:text="LOGOUT"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@id/fragmet_profile_button_edit"
+        app:layout_constraintBottom_toBottomOf="parent"
+
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragmet_profile_description" />
+        app:layout_constraintStart_toEndOf="@+id/fragmet_profile_button_edit" />
 
     <Button
         android:id="@+id/fragmet_profile_button_edit"
         android:layout_width="175dp"
         android:layout_height="60dp"
-        android:layout_marginBottom="56dp"
+        android:layout_marginBottom="70dp"
         android:drawableLeft="@drawable/ic_stat_ic_ledit"
         android:text="EDIT PROFILE"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintEnd_toStartOf="@+id/fragment_profile_button_logout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_profile_button_logout"
         app:strokeColor="@color/black" />
 
     <TextView
@@ -140,9 +139,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:textSize="30dp"
         android:text="Andrea"
         android:textColor="@color/black"
+        android:textSize="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.19"
         app:layout_constraintStart_toEndOf="@+id/fragmet_profile_name"
@@ -160,6 +159,7 @@
         app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintStart_toEndOf="@+id/fragmet_profile_age"
         app:layout_constraintTop_toBottomOf="@+id/fragmet_profile_name_user" />
+
     <TextView
         android:id="@+id/fragmet_profile_sex_user"
         android:layout_width="wrap_content"
@@ -175,17 +175,47 @@
 
     <TextView
         android:id="@+id/fragmet_profile_description_user"
-        android:layout_width="187dp"
-        android:layout_height="130dp"
+        android:layout_width="195dp"
+        android:layout_height="112dp"
+        android:layout_marginTop="28dp"
         android:text="Description"
         android:textColor="@color/black"
         android:textSize="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.542"
+        app:layout_constraintStart_toEndOf="@+id/fragmet_profile_description"
+        app:layout_constraintTop_toBottomOf="@+id/fragmet_profile_sex_user" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/sharePos"
+        android:layout_width="60dp"
+        android:layout_height="59dp"
+        android:background="#F65050"
         app:layout_constraintBottom_toTopOf="@+id/fragment_profile_button_logout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.348"
-        app:layout_constraintStart_toEndOf="@+id/fragmet_profile_description"
-        app:layout_constraintTop_toBottomOf="@+id/fragmet_profile_sex_user"
-        app:layout_constraintVertical_bias="0.538" />
+        app:layout_constraintHorizontal_bias="0.53"
+        app:layout_constraintStart_toEndOf="@+id/sharePosText"
+        app:layout_constraintTop_toBottomOf="@+id/fragmet_profile_description_user"
+        app:layout_constraintVertical_bias="0.49"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+        app:srcCompat="@drawable/ic_stat_ic_gps"
+        app:strokeColor="#00FFFFFF" />
+
+    <TextView
+        android:id="@+id/sharePosText"
+        android:layout_width="252dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:gravity="center_vertical"
+        android:text="Share Real-Time Position:"
+
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/fragmet_profile_button_edit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragmet_profile_description"
+        app:layout_constraintVertical_bias="0.753" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

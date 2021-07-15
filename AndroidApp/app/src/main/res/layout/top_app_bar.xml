@@ -10,7 +10,6 @@
         android:id="@+id/topAppBar"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        app:menu="@menu/top_app_bar"
         app:title="@string/app_name"
         app:titleMarginStart="155dp"
         app:titleTextColor="@color/black" />

@@ -9,5 +9,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="color_black">#000</color>
+    <color name="sharing_pos_off">#FA4A4A</color>
+    <color name="sharing_pos_on">#FF74F87A</color>
+
 
 </resources>
