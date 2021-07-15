@@ -1,16 +1,19 @@
 package com.example.next2me;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,47 +44,62 @@ public class HomeActivity extends AppCompatActivity {
 
     private final int LOCATION_PERMISSION_CODE = 1;
     BottomNavigationView menu_nav;
+    ProfileFragment profileFragment;
     LocationManager locationManager;
-
-
-    /*LocationListener locationListener = new LocationListener() {
-        @Override
-        public void onLocationChanged(android.location.Location location) {
-            double latitude = location.getLatitude();
-            double longitude = location.getLongitude();
-            DatabaseHelper.getInstance().SendUserPositionToDB(new LatLng(latitude, longitude));
-            Log.d("pos", "lat = " + latitude);
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-            Log.d("pos", "status changed");
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-
-        }
-    };*/
+    private LatLng currentUserPos = new LatLng(44.0575500,12.5652800);
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ChatLogIn();
-
-        LocationService locationService = new LocationService();
         setContentView(R.layout.activity_home);
+        profileFragment = new ProfileFragment();
         menu_nav = findViewById(R.id.menu_nav);
         menu_nav.setSelectedItemId(R.id.nav_home);
         menu_nav.setOnNavigationItemSelectedListener(selectedListener);
         Utilities.insertFragment(this, new DashboardFragment(), "FRAGMENT_TAG");
+
+        LocationListener locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(android.location.Location location) {
+                currentUserPos = new LatLng(location.getLatitude(), location.getLongitude());
+                if(profileFragment.isPosSharingEnabled()){
+                   DatabaseHelper.getInstance().SendUserPositionToDB(currentUserPos);
+                }
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+                Log.d("pos", "status changed");
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+                Log.d("pos", "provider enabled");
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+                Log.d("pos", "provider disabled");
+            }
+        };
+
+        try {
+            locationManager = (LocationManager)getApplicationContext().getSystemService(LOCATION_SERVICE);
+            if (ActivityCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(HomeActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
+            } else {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 200, 1, locationListener);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+
     }
+
+
 
     private void ChatLogIn() {
         if (CometChat.getLoggedInUser() == null) {
@@ -107,15 +125,11 @@ public class HomeActivity extends AppCompatActivity {
                         break;
                     case R.id.nav_map:
                         menu_nav.getMenu().getItem(1).setChecked(true);
-                        if(ContextCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                            Utilities.insertFragment(this, new MapsFragment(),"MAP FRAGMENT");
-                        }else{
-                            requestLocationPermission();
-                        }
+                        Utilities.insertFragment(this, new MapsFragment(),"MAP FRAGMENT");
                         break;
                     case R.id.nav_profile:
                         menu_nav.getMenu().getItem(2).setChecked(true);
-                        Utilities.insertFragment(this, new ProfileFragment(),"PROFILE FRAGMENT");
+                        Utilities.insertFragment(this, profileFragment,"PROFILE FRAGMENT");
                         break;
 
                     case R.id.nav_chat:
@@ -131,57 +145,8 @@ public class HomeActivity extends AppCompatActivity {
                 return false;
             };
 
-    private void requestLocationPermission() {
-        if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-            ActivityCompat.requestPermissions(HomeActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
-        }else{
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE );
-        }
+    public LatLng getCurrentUserPos(){
+        return currentUserPos;
     }
 
-
-
-    /*@Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        /*if (requestCode == LOCATION_PERMISSION_CODE){
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                Utilities.insertFragment(this, new MapsFragment(),"MAP FRAGMENT");
-            } else{
-                Log.d("pos","Permission denied");
-            }
-        }
-    }
-
-   /* public void updateUI(){
-        String uid = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
-        DatabaseReference userTable = DatabaseHelper.getInstance().getDb().getReference("Users");
-        userTable.child(uid).child("INFORMATIONS").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                StorageReference imageRef = DatabaseHelper.getInstance().getStorageRef().child("ProfilePictures/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + ".jpg");
-                final long ONE_MEGABYTE = 1024 * 1024;
-                imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                    @Override
-                    public void onSuccess(byte[] bytes) {
-                        ((ImageView)findViewById(R.id.profilePicture)).setImageBitmap(Utilities.byteToBitmap(bytes));
-
-                    }
-                });
-
-                ((TextView)findViewById(R.id.name)).setText(user.getName());
-                ((TextView)findViewById(R.id.surname)).setText(user.getSurname());
-                ((TextView)findViewById(R.id.birthdate)).setText(user.getBirthdate());
-                ((TextView)findViewById(R.id.gender)).setText(user.getGender());
-                ((TextView)findViewById(R.id.preferences)).setText(user.getPreferences());
-                ((TextView)findViewById(R.id.mail)).setText(user.getEmail());
-                ((TextView)findViewById(R.id.description)).setText(user.getDescription());
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("db","Error while reading data");
-            }
-        });
-    }*/
 }

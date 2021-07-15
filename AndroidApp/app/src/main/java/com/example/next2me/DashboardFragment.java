@@ -49,8 +49,6 @@ public class DashboardFragment extends Fragment implements OnItemListener{
 
     private final int LOCATION_PERMISSION_CODE = 1;
     LocationManager locationManager;
-    private LatLng currentUserPos = new LatLng(44.0575500,12.5652800);
-
     private ListViewModel model;
 
 
@@ -77,39 +75,6 @@ public class DashboardFragment extends Fragment implements OnItemListener{
             }
         });
 
-        LocationListener locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(android.location.Location location) {
-                currentUserPos = new LatLng(location.getLatitude(), location.getLongitude());
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-                Log.d("pos", "status changed");
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-                Log.d("pos", "provider enabled");
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-                Log.d("pos", "provider disabled");
-            }
-        };
-
-        try {
-            locationManager = (LocationManager) getContext().getSystemService(LOCATION_SERVICE);
-            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
-            } else {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-            }
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false);
 
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -118,7 +83,7 @@ public class DashboardFragment extends Fragment implements OnItemListener{
         recyclerView.setAdapter(adapter);
 
         model = new ViewModelProvider((ViewModelStoreOwner)getActivity()).get(ListViewModel.class);
-        model.getItems(currentUserPos).observe((LifecycleOwner) getActivity(), new Observer<List<CardItem>>() {
+        model.getItems(((HomeActivity)getActivity()).getCurrentUserPos()).observe((LifecycleOwner) getActivity(), new Observer<List<CardItem>>() {
             @Override
             public void onChanged(List<CardItem> cardItems) {
                 Log.d("items", cardItems.toString());

@@ -1,6 +1,7 @@
 package com.example.next2me;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import com.example.next2me.data.User;
 import com.example.next2me.utils.DatabaseHelper;
 import com.example.next2me.utils.Utilities;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,7 +36,8 @@ public class ProfileFragment extends Fragment {
     private TextView ageTV;
     private TextView sexTV;
     private TextView descriptionTV;
-    private Switch switchPos;
+    private ShapeableImageView sharingPosImageView;
+    private boolean isPosSharingEnabled;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,7 +81,17 @@ public class ProfileFragment extends Fragment {
         ageTV = view.findViewById(R.id.fragmet_profile_age_user);
         sexTV = view.findViewById(R.id.fragmet_profile_sex_user);
         descriptionTV = view.findViewById(R.id.fragmet_profile_description_user);
-        switchPos = view.findViewById(R.id.app_bar_switch);
+        sharingPosImageView = view.findViewById(R.id.sharePos);
+        sharingPosImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isPosSharingEnabled==false){
+                    isPosSharingEnabled = true;
+                }else{
+                    isPosSharingEnabled=false;
+                }
+            }
+        });
 
 
         DatabaseHelper.getInstance().getDb().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("INFORMATIONS").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -99,5 +112,9 @@ public class ProfileFragment extends Fragment {
 
 
 
+    }
+
+    public boolean isPosSharingEnabled() {
+        return isPosSharingEnabled;
     }
 }
