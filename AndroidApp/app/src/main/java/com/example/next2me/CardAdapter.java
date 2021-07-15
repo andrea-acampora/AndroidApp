@@ -1,18 +1,17 @@
 package com.example.next2me;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.next2me.utils.DatabaseHelper;
 import com.example.next2me.viewmodel.CardItem;
@@ -50,7 +49,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
-        holder.textView.setText(cardItems.get(position).getName() + ", " + getAge(cardItems.get(position).getBirthday()));
+        String name = cardItems.get(position).getName();
+        String nameUpp = name.substring(0, 1).toUpperCase() + name.substring(1);
+        holder.username.setText(nameUpp + ", " + getAge(cardItems.get(position).getBirthday()));
         //holder.imageView.setImageResource(profilePic.get(position));
         holder.setImage(cardItems.get(position).getId());
     }
@@ -70,16 +71,17 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 
     public static class CardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        ImageView imageView;
-        TextView textView;
+        ImageView userPic;
+        TextView username;
         private DashboardFragment dashboardFragment = new DashboardFragment();
         private OnItemListener itemListener;
 
 
         public CardViewHolder(@NonNull View itemView, OnItemListener listener) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.imageView);
-            textView = itemView.findViewById(R.id.textView);
+            userPic = itemView.findViewById(R.id.userPic);
+            username = itemView.findViewById(R.id.username);
+
             itemListener = listener;
 
             itemView.setOnClickListener(this);
@@ -87,9 +89,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 
         public void setImage(String profilePicId){
             StorageReference imageRef = DatabaseHelper.getInstance().getStorageRef().child("ProfilePictures/" + profilePicId + ".jpg");
+            RequestOptions requestOptions = new RequestOptions();
+            requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(16));
             GlideApp.with(itemView)
                     .load(imageRef)
-                    .into(this.imageView);
+                    .apply(requestOptions)
+                    .into(this.userPic);
         }
 
         @Override

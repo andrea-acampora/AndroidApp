@@ -20,7 +20,11 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.Objects;
+import java.util.concurrent.Future;
+
+import static com.google.android.gms.tasks.Tasks.await;
 
 public class DatabaseHelper {
 
@@ -56,8 +60,8 @@ public class DatabaseHelper {
                Log.d("image", "image upload success");
            }
        });
-    }
 
+    }
 
     public void addUserToDB(User user){
         DatabaseReference userTable = db.getReference("Users");
