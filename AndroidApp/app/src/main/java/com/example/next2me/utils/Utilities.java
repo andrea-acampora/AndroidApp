@@ -40,7 +40,7 @@ public class Utilities {
 
     public static int getAge(String dobString){
         Date date = null;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
         try {
             date = sdf.parse(dobString);
         } catch (ParseException e) {

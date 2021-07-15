@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/single_match_request"
@@ -8,12 +9,18 @@
     android:background="#03BC1818"
     android:backgroundTint="#FFFFFF"
     app:strokeColor="@color/material_on_surface_stroke"
-    app:strokeWidth="1dp">
+    app:strokeWidth="1dp"
+    app:cardCornerRadius="20dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+
+
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="#0D62D5B3"
+        android:layout_height="85dp"
+        android:background="#00FFFFFF"
         android:orientation="horizontal"
         android:textAlignment="center">
 

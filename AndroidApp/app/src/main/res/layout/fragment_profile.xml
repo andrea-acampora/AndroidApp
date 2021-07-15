@@ -49,8 +49,8 @@
             android:id="@+id/profile_pic_fragment_profile"
             android:layout_width="161dp"
             android:layout_height="169dp"
+            android:scaleType="centerCrop"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="16dp"
             android:baselineAlignBottom="false"
             android:src="@drawable/avatar" />
     </RelativeLayout>
@@ -87,7 +87,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
-        android:text="Sex :"
+        android:text="Gender :"
         android:textColor="@color/black"
         android:textSize="30dp"
         android:textStyle="bold"
@@ -175,18 +175,17 @@
 
     <TextView
         android:id="@+id/fragmet_profile_description_user"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="187dp"
+        android:layout_height="130dp"
         android:text="Description"
         android:textColor="@color/black"
-        android:textSize="30dp"
+        android:textSize="25dp"
         app:layout_constraintBottom_toTopOf="@+id/fragment_profile_button_logout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.311"
+        app:layout_constraintHorizontal_bias="0.348"
         app:layout_constraintStart_toEndOf="@+id/fragmet_profile_description"
         app:layout_constraintTop_toBottomOf="@+id/fragmet_profile_sex_user"
-        app:layout_constraintVertical_bias="0.169" />
-
+        app:layout_constraintVertical_bias="0.538" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

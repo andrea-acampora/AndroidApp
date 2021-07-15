@@ -46,6 +46,7 @@ public class MatchFragment extends Fragment {
     private MatchRequestAdapter adapter;
     private RecyclerView recyclerView;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,9 +88,9 @@ public class MatchFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<MatchRequest> matches_list = new ArrayList<>();
-
                 for (DataSnapshot data : dataSnapshot.getChildren()){
                     if(data.getValue().toString().equals("pending")){
+                        Log.d("notif-match","here");
                         MatchRequest request = new MatchRequest();
                         request.setUid(data.getKey());
                         DatabaseHelper.getInstance().getDb().getReference("Users").child(data.getKey()).child("INFORMATIONS").addListenerForSingleValueEvent(new ValueEventListener() {
