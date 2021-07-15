@@ -91,7 +91,6 @@ public class MapsFragment extends Fragment {
                 @Override
                 public boolean onMarkerClick(@NonNull Marker marker) {
                     String uid = markersId.get(marker);
-
                     return false;
                 }
             });
@@ -123,6 +122,8 @@ public class MapsFragment extends Fragment {
     private void getAllMatches(){
 
         DatabaseReference reference = DatabaseHelper.getInstance().getDb().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("MATCHES");
+
+
         reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -154,7 +155,6 @@ public class MapsFragment extends Fragment {
                 if(snapshot.getKey().equals("POS")){
                     Double lat = snapshot.child("lat").getValue(Double.class);
                     Double lng = snapshot.child("long").getValue(Double.class);
-
                     StorageReference imageRef = DatabaseHelper.getInstance().getStorageRef().child("ProfilePictures").child(uid + ".jpg");
                     imageRef.getBytes(1024*1024)
                             .addOnSuccessListener(new OnSuccessListener<byte[]>() {

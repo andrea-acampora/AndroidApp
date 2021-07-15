@@ -18,8 +18,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.next2me.data.User;
+import com.cometchat.pro.core.CometChat;
+import com.cometchat.pro.exceptions.CometChatException;
+import com.cometchat.pro.models.User;
+import com.example.next2me.utils.ChatConstants;
 import com.example.next2me.utils.DatabaseHelper;
+import com.example.next2me.utils.LocationService;
 import com.example.next2me.utils.Utilities;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -69,11 +73,29 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ChatLogIn();
+
+        LocationService locationService = new LocationService();
         setContentView(R.layout.activity_home);
         menu_nav = findViewById(R.id.menu_nav);
         menu_nav.setSelectedItemId(R.id.nav_home);
         menu_nav.setOnNavigationItemSelectedListener(selectedListener);
         Utilities.insertFragment(this, new DashboardFragment(), "FRAGMENT_TAG");
+    }
+
+    private void ChatLogIn() {
+        if (CometChat.getLoggedInUser() == null) {
+            CometChat.login(FirebaseAuth.getInstance().getCurrentUser().getUid(), ChatConstants.API_KEY, new CometChat.CallbackListener<com.cometchat.pro.models.User>() {
+
+                @Override
+                public void onSuccess(User user) {
+                }
+
+                @Override
+                public void onError(CometChatException e) {
+                }
+            });
+        }
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener selectedListener =
@@ -95,8 +117,14 @@ public class HomeActivity extends AppCompatActivity {
                         menu_nav.getMenu().getItem(2).setChecked(true);
                         Utilities.insertFragment(this, new ProfileFragment(),"PROFILE FRAGMENT");
                         break;
-                    case R.id.nav_matches:
+
+                    case R.id.nav_chat:
                         menu_nav.getMenu().getItem(3).setChecked(true);
+                        Utilities.insertFragment(this, new ChatListFragment(),"CHAT FRAGMENT");
+                        break;
+
+                    case R.id.nav_matches:
+                        menu_nav.getMenu().getItem(4).setChecked(true);
                         Utilities.insertFragment(this, new MatchFragment(),"MATCH FRAGMENT");
                         break;
                 }
@@ -155,12 +183,5 @@ public class HomeActivity extends AppCompatActivity {
                 Log.e("db","Error while reading data");
             }
         });
-
-
     }*/
-
-
-
-
-
 }

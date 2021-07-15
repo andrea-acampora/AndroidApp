@@ -19,6 +19,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.next2me.service.NotificationsHelper;
 import com.example.next2me.utils.DatabaseHelper;
 import com.example.next2me.viewmodel.CardItem;
@@ -68,8 +71,8 @@ public class DetailsFragment extends Fragment {
         this.profilePic = view.findViewById(R.id.profile);
         this.matchRequest = view.findViewById(R.id.matchRequest);
         this.descrizione = view.findViewById(R.id.descrizione);
-        this.genere = view.findViewById(R.id.genere);
-        this.eta = view.findViewById(R.id.eta);
+        //this.genere = view.findViewById(R.id.genere);
+       // this.eta = view.findViewById(R.id.eta);
 
 
         Activity activity = getActivity();
@@ -89,7 +92,7 @@ public class DetailsFragment extends Fragment {
                             String gender = snapshot.child("gender").getValue().toString();
                             String birthdate = snapshot.child("birthdate").getValue().toString();
                             descrizione.setText(description);
-                            genere.setText(gender);
+                           /* genere.setText(gender);
 
 
                             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -105,7 +108,7 @@ public class DetailsFragment extends Fragment {
                             int month = c.get(Calendar.MONTH) + 1;
                             int day = c.get(Calendar.DAY_OF_MONTH);
 
-                            eta.setText(getAge(year, month, day));
+                            eta.setText(getAge(year, month, day));*/
 
                         }
 
@@ -148,8 +151,11 @@ public class DetailsFragment extends Fragment {
 
     private void setImage(String profilePicId) {
         StorageReference imageRef = DatabaseHelper.getInstance().getStorageRef().child("ProfilePictures/" + profilePicId + ".jpg");
+        RequestOptions requestOptions = new RequestOptions();
+        requestOptions = requestOptions.transform(new CenterCrop(), new RoundedCorners(16));
         GlideApp.with(getView())
                 .load(imageRef)
+                .apply(requestOptions)
                 .into(this.profilePic);
     }
 

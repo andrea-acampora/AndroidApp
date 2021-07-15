@@ -1,6 +1,7 @@
 package com.example.next2me;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cometchat.pro.constants.CometChatConstants;
+import com.cometchat.pro.core.CometChat;
+import com.cometchat.pro.exceptions.CometChatException;
+import com.cometchat.pro.models.TextMessage;
 import com.example.next2me.data.MatchRequest;
 import com.example.next2me.service.NotificationsHelper;
 import com.example.next2me.utils.DatabaseHelper;
@@ -50,6 +55,8 @@ public class MatchRequestAdapter extends RecyclerView.Adapter<MatchRequestViewHo
         holder.accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sendMessage("Ciao, ho accettato la tua richiesta", matchRequest.getUid());
+
                 DatabaseHelper.getInstance().getDb().getReference("Users")
                         .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                         .child("MATCHES").child(matchRequest.getUid()).setValue("accepted");
@@ -88,7 +95,24 @@ public class MatchRequestAdapter extends RecyclerView.Adapter<MatchRequestViewHo
         });
     }
 
+    private void sendMessage(String message, String receiverId) {
+        String receiverID = receiverId;
+        String messageText = message;
+        String receiverType = CometChatConstants.RECEIVER_TYPE_USER;
+        Log.d("mess", "messaggio da inviare a " + receiverID);
 
+        TextMessage textMessage = new TextMessage(receiverID, messageText, receiverType);
+
+        CometChat.sendMessage(textMessage, new CometChat.CallbackListener <TextMessage> () {
+            @Override
+            public void onSuccess(TextMessage textMessage) {
+                Log.d("mess", "messaggio inviato");
+            }
+            @Override
+            public void onError(CometChatException e) {
+            }
+        });
+    }
 
     @Override
     public int getItemCount() {

@@ -45,7 +45,7 @@ public class AgeFragment extends Fragment {
                     }
 
                     if(date.getMonth() < 10){
-                        month = "0" + date.getDayOfMonth();
+                        month = "0" + date.getMonth();
                     }else{
                         month = String.valueOf(date.getMonth());
                     }
