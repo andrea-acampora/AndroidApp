@@ -23,6 +23,7 @@ import com.cometchat.pro.exceptions.CometChatException;
 import com.cometchat.pro.models.User;
 import com.example.next2me.utils.ChatConstants;
 import com.example.next2me.utils.DatabaseHelper;
+import com.example.next2me.utils.LocationService;
 import com.example.next2me.utils.Utilities;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -73,6 +74,8 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ChatLogIn();
+
+        LocationService locationService = new LocationService();
         setContentView(R.layout.activity_home);
         menu_nav = findViewById(R.id.menu_nav);
         menu_nav.setSelectedItemId(R.id.nav_home);

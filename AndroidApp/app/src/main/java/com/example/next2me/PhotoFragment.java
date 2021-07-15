@@ -1,6 +1,7 @@
 package com.example.next2me;
 
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -23,13 +24,23 @@ import com.cometchat.pro.exceptions.CometChatException;
 import com.cometchat.pro.models.User;
 import com.example.next2me.utils.ChatConstants;
 import com.example.next2me.utils.DatabaseHelper;
+import com.example.next2me.utils.FaceDetector;
+import com.example.next2me.utils.RotationUtils;
 import com.example.next2me.utils.UserHelper;
 import com.example.next2me.utils.Utilities;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.StorageReference;
+import com.google.mlkit.vision.common.InputImage;
+import com.google.mlkit.vision.face.Face;
+import com.google.mlkit.vision.face.FaceDetection;
+import com.google.mlkit.vision.face.FaceDetectorOptions;
 
 import java.io.IOException;
+import java.util.List;
+
 import static android.app.Activity.RESULT_OK;
 
 @SuppressWarnings("ALL")
@@ -44,6 +55,10 @@ public class PhotoFragment extends Fragment {
     Button btnContinua;
     Bitmap bm;
 
+    FaceDetectorOptions realTimeOpts;
+    com.google.mlkit.vision.face.FaceDetector detector;
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -53,7 +68,14 @@ public class PhotoFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        realTimeOpts = new FaceDetectorOptions.Builder()
+                .setContourMode(FaceDetectorOptions.CONTOUR_MODE_ALL)
+                .build();
+        detector = FaceDetection.getClient();
+
         profilePic = view.findViewById(R.id.profilePic);
+
         final RegistrationActivity activity = (RegistrationActivity) getActivity();
         if(activity != null){
             activity.increaseProgressBar(20);
@@ -66,12 +88,32 @@ public class PhotoFragment extends Fragment {
                     profilePic.setDrawingCacheEnabled(true);
                     profilePic.buildDrawingCache();
                     Bitmap bitmap = ((BitmapDrawable) profilePic.getDrawable()).getBitmap();
-                    UserHelper.getInstance().setProfilePic(bitmap);
-                    DatabaseHelper dbh = DatabaseHelper.getInstance();
-                    dbh.addPhotoToStorage(UserHelper.getInstance().getProfilePic(), FirebaseAuth.getInstance().getCurrentUser().getUid());
-                    dbh.addUserToDB(UserHelper.getInstance().getAppUser());
-                    registerUserInCometChat(); 
-                    startActivity(new Intent(getActivity(), HomeActivity.class));
+                    InputImage image = InputImage.fromBitmap(bitmap,0);
+                    Task<List<Face>> result =
+                            detector.process(image)
+                                    .addOnSuccessListener(
+                                            faces -> {
+                                                if(faces.size() > 0){
+                                                    Log.d("face", "faccia riconosciuta");
+                                                    UserHelper.getInstance().setProfilePic(bitmap);
+                                                    DatabaseHelper dbh = DatabaseHelper.getInstance();
+                                                    dbh.addPhotoToStorage(UserHelper.getInstance().getProfilePic(), FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                                    dbh.addUserToDB(UserHelper.getInstance().getAppUser());
+                                                    registerUserInCometChat();
+                                                    startActivity(new Intent(getActivity(), HomeActivity.class));
+                                                } else{
+                                                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
+                                                    builder.setTitle("L'immagine non contiene il tuo viso")
+                                                            .setMessage("Perfavore, inserisci una foto nella quale sei riconoscibile")
+                                                            .setPositiveButton("capito", new DialogInterface.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(DialogInterface dialog, int which) {}
+                                                            })
+                                                            .show();
+                                                }
+                                            })
+                                    .addOnFailureListener(
+                                            e -> {});
                 }
             });
 
@@ -92,6 +134,7 @@ public class PhotoFragment extends Fragment {
 
         }
     }
+
 
     private void registerUserInCometChat() {
         User user = new User();
@@ -154,4 +197,6 @@ public class PhotoFragment extends Fragment {
         }
         profilePic.setImageBitmap(bm);
     }
+
+
 }
