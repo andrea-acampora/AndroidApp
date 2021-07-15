@@ -29,6 +29,7 @@ import com.example.next2me.utils.RotationUtils;
 import com.example.next2me.utils.UserHelper;
 import com.example.next2me.utils.Utilities;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.SuccessContinuation;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
@@ -140,22 +141,33 @@ public class PhotoFragment extends Fragment {
         User user = new User();
         user.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
         user.setName(UserHelper.getInstance().getAppUser().getName());
-        DatabaseHelper.getInstance().getStorageRef().child("ProfilePictures").child(FirebaseAuth.getInstance().getCurrentUser().getUid() + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                user.setAvatar(uri.toString());
-            }
-        });
-
         CometChat.createUser(user, ChatConstants.API_KEY, new CometChat.CallbackListener<User>() {
             @Override
             public void onSuccess(User user) {
                 Log.d("createUser", user.toString());
             }
-
             @Override
             public void onError(CometChatException e) {
                 Log.e("createUser", e.getMessage());
+            }
+        });
+
+
+        StorageReference reference = DatabaseHelper.getInstance().getStorageRef().child("ProfilePictures/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + ".jpg");
+        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Log.d("createUser", "uri = " + uri.toString());
+                user.setAvatar(uri.toString());
+                CometChat.updateCurrentUserDetails(user, new CometChat.CallbackListener<User>() {
+                    @Override
+                    public void onSuccess(User user) {
+                        Log.d("createUser", "updated user");
+                    }
+                    @Override
+                    public void onError(CometChatException e) {
+                    }
+                });
             }
         });
     }
@@ -197,6 +209,4 @@ public class PhotoFragment extends Fragment {
         }
         profilePic.setImageBitmap(bm);
     }
-
-
 }

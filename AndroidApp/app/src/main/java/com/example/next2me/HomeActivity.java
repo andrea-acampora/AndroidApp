@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -58,7 +59,10 @@ public class HomeActivity extends AppCompatActivity {
         menu_nav = findViewById(R.id.menu_nav);
         menu_nav.setSelectedItemId(R.id.nav_home);
         menu_nav.setOnNavigationItemSelectedListener(selectedListener);
-        
+        DatabaseHelper.getInstance().SendUserPositionToDB(new LatLng(44.0575500,12.5652800));
+
+
+
         Utilities.insertFragment(this, new DashboardFragment(), "FRAGMENT_TAG");
 
         LocationListener locationListener = new LocationListener() {
