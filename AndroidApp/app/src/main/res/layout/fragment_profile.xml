@@ -14,7 +14,8 @@
         app:layout_constraintBottom_toTopOf="@+id/buttonLogout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userDescription"/>
 
     <ImageView
         android:id="@+id/profileImage"
@@ -24,7 +25,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="60dp"
         android:layout_marginBottom="291dp"
-        app:layout_constraintBottom_toTopOf="@+id/fragmet_profile_button_edit"
+        app:layout_constraintBottom_toTopOf="@+id/buttonEditProfile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -39,6 +40,7 @@
         android:layout_marginTop="16dp"
         android:text="TextView"
         android:textAlignment="center"
+        android:textColor="#2C2B2B"
         android:textSize="22dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameAge" />
@@ -50,6 +52,7 @@
         android:layout_marginTop="16dp"
         android:text="TextView"
         android:textAlignment="center"
+        android:textColor="#292929"
         android:textSize="22dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,6 +65,7 @@
         android:layout_marginTop="16dp"
         android:text="TextView"
         android:textAlignment="center"
+        android:textColor="@color/black"
         android:textSize="35dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -70,27 +74,29 @@
 
     <Button
         android:id="@+id/buttonLogout"
-        android:layout_width="170dp"
-        android:layout_height="43dp"
-        android:layout_marginEnd="28dp"
+        android:layout_width="160dp"
+        android:layout_height="50dp"
         android:layout_marginBottom="80dp"
         android:drawableLeft="@drawable/ic_stat_ic_logout"
         android:text="LOGOUT"
         android:textColor="@color/black"
+        android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buttonEditProfile"
         app:strokeColor="@color/black" />
 
     <Button
         android:id="@+id/buttonEditProfile"
-        android:layout_width="170dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="28dp"
+        android:layout_width="160dp"
+        android:layout_height="50dp"
         android:layout_marginBottom="80dp"
         android:drawableLeft="@drawable/ic_stat_ic_ledit"
         android:text="EDIT PROFILE"
         android:textColor="@color/black"
+        android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonLogout"
         app:layout_constraintStart_toStartOf="parent"
         app:strokeColor="@color/black" />
 </androidx.constraintlayout.widget.ConstraintLayout>
