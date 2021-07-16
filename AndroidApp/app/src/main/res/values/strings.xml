@@ -38,4 +38,7 @@
     <string name="message_hint">Enter your message</string>
     <string name="Enter_your_message_here">Enter your message here</string>
     <string name="button">Button</string>
+    <string name="attivata_condivisione_della_posizione">Attivata condivisione della posizione</string>
+    <string name="disattivata_condivisione_della_posizione">Disattivata condivisione della posizione</string>
+
 </resources>

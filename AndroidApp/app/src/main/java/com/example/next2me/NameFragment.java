@@ -33,7 +33,9 @@ public class NameFragment extends Fragment {
             TextInputEditText name = view.findViewById(R.id.name);
             btnContinua.setOnClickListener((View.OnClickListener) v -> {
                 if(name.getText().length() > 0){
-                    UserHelper.getInstance().setName(name.getText().toString());
+                    String nome = name.getText().toString();
+                    String nameUpp = nome.substring(0, 1).toUpperCase() + nome.substring(1);
+                    UserHelper.getInstance().setName(nameUpp);
                     Utilities.insertFragment((AppCompatActivity) activity, new AgeFragment(), "AGE_FRAGMENT");
                 }
             });
