@@ -1,26 +1,24 @@
 package com.example.next2me;
 
 import android.content.Intent;
-import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.next2me.data.User;
 import com.example.next2me.utils.DatabaseHelper;
-import com.example.next2me.utils.Utilities;
-import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,16 +30,16 @@ public class ProfileFragment extends Fragment {
     private Button editButton;
     private Button logoutButton;
     private ImageView profilePic;
-    private TextView nameTV;
-    private TextView ageTV;
+    private TextView nameAgeTV;
     private TextView sexTV;
     private TextView descriptionTV;
-    private ShapeableImageView sharingPosImageView;
-    private boolean isPosSharingEnabled;
+    private ImageButton gpsButton;
+    private boolean isPosSharingEnabled = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
     }
 
@@ -55,40 +53,39 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.editButton = view.findViewById(R.id.fragmet_profile_button_edit);
-        this.logoutButton = view.findViewById(R.id.fragment_profile_button_logout);
-        this.editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(),RegistrationActivity.class));
-            }
-        });
-        this.logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(getActivity(),MainActivity.class));
-            }
+        this.editButton = view.findViewById(R.id.buttonEditProfile);
+        this.logoutButton = view.findViewById(R.id.buttonLogout);
+        this.editButton.setOnClickListener(v -> startActivity(new Intent(getActivity(),RegistrationActivity.class)));
+        this.logoutButton.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(getActivity(),MainActivity.class));
         });
 
-        this.profilePic = view.findViewById(R.id.profile_pic_fragment_profile);
+        this.profilePic = view.findViewById(R.id.profileImage);
         StorageReference imageRef = DatabaseHelper.getInstance().getStorageRef().child("ProfilePictures/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + ".jpg");
         GlideApp.with(view)
                 .load(imageRef)
+                .circleCrop()
                 .into(this.profilePic);
 
-        nameTV = view.findViewById(R.id.fragmet_profile_name_user);
-        ageTV = view.findViewById(R.id.fragmet_profile_age_user);
-        sexTV = view.findViewById(R.id.fragmet_profile_sex_user);
-        descriptionTV = view.findViewById(R.id.fragmet_profile_description_user);
-        sharingPosImageView = view.findViewById(R.id.sharePos);
-        sharingPosImageView.setOnClickListener(new View.OnClickListener() {
+        nameAgeTV = view.findViewById(R.id.nameAge);
+        sexTV = view.findViewById(R.id.gender);
+        descriptionTV = view.findViewById(R.id.userDescription);
+        gpsButton = view.findViewById(R.id.gpsButton);
+        gpsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isPosSharingEnabled==false){
+                if(!isPosSharingEnabled){
+                    Snackbar.make(getView(), R.string.attivata_condivisione_della_posizione, Snackbar.LENGTH_SHORT)
+                            .show();
                     isPosSharingEnabled = true;
+                    gpsButton.getBackground().setTint(Color.BLUE);
                 }else{
+                    Snackbar.make(getView(), R.string.disattivata_condivisione_della_posizione, Snackbar.LENGTH_SHORT)
+                            .show();
                     isPosSharingEnabled=false;
+                    gpsButton.getBackground().setTint(Color.DKGRAY);
+
                 }
             }
         });
@@ -98,9 +95,9 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
             User user = snapshot.getValue(User.class);
-            nameTV.setText(user.getName());
-            ageTV.setText(String.valueOf(Utilities.getAge(user.getBirthdate())));
-            sexTV.setText(user.getGender());
+            nameAgeTV.setText(user.getName());
+            //ageTV.setText(String.valueOf(Utilities.getAge(user.getBirthdate())));
+            sexTV.setText(user.getGender().equals("F") ? "Femmina" : "Maschio");
             descriptionTV.setText(user.getDescription());
             }
 

@@ -48,11 +48,9 @@ public class DetailsFragment extends Fragment {
 
     private TextView name;
     private TextView descrizione;
-    private TextView genere;
     private ImageView profilePic;
     private ImageButton matchRequest;
     private ListViewModel listViewModel;
-    private TextView eta;
     private ImageButton matchRefused;
 
 
