@@ -7,46 +7,48 @@
 
     <Button
         android:id="@+id/camera"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="34dp"
+        android:layout_width="180dp"
+        android:layout_height="50dp"
+        android:backgroundTint="#BA4D42"
+        android:drawableLeft="@drawable/ic_camera_white"
         android:text="@string/fotocamera"
-        app:layout_constraintBottom_toTopOf="@+id/galleria"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/galleria"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profilePic" />
+        app:layout_constraintTop_toBottomOf="@+id/profilePic"
+        app:layout_constraintBottom_toTopOf="@+id/buttonContinua"/>
 
     <Button
         android:id="@+id/galleria"
-        android:layout_width="129dp"
-        android:layout_height="41dp"
-        android:layout_marginBottom="160dp"
+        android:layout_width="170dp"
+        android:layout_height="50dp"
+        android:backgroundTint="#BA4D42"
+        android:drawableLeft="@drawable/ic_gallery_white"
         android:text="@string/galleria"
         app:layout_constraintBottom_toTopOf="@+id/buttonContinua"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/camera" />
+        app:layout_constraintStart_toEndOf="@+id/camera"
+        app:layout_constraintTop_toBottomOf="@+id/profilePic" />
 
     <ImageView
         android:id="@+id/profilePic"
         android:layout_width="210dp"
         android:layout_height="196dp"
-        android:layout_marginBottom="41dp"
         android:contentDescription="@string/profilepic"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toTopOf="@+id/camera"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scatta_una_foto"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:srcCompat="@drawable/avatar"
+        tools:srcCompat="@drawable/avatar" />
 
     <Button
         android:id="@+id/buttonContinua"
         android:layout_width="163dp"
         android:layout_height="55dp"
-        android:layout_marginBottom="70dp"
         android:text="@string/continua"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -58,14 +60,14 @@
         android:id="@+id/scatta_una_foto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
         android:text="@string/ora_facci_vedere_chi_sei"
         android:textColor="@color/black"
-        android:textSize="25dp"
+        android:textSize="30sp"
         android:textStyle="bold"
+
         app:layout_constraintBottom_toTopOf="@+id/profilePic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

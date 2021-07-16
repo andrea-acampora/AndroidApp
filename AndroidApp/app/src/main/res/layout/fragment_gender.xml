@@ -11,84 +11,86 @@
         android:id="@+id/uomini"
         android:layout_width="334dp"
         android:layout_height="48dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginBottom="24dp"
         android:text="@string/uomini"
         android:textSize="24sp"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
         app:layout_constraintBottom_toTopOf="@+id/donne"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/donne"
         android:layout_width="332dp"
         android:layout_height="44dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginBottom="160dp"
         android:text="@string/donne"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintBottom_toTopOf="@id/buttonContinua"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/uomini" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
         android:layout_marginBottom="28dp"
         android:text="@string/desideri_incontrare"
         android:textColor="@color/black"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/uomini"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonMale" />
 
     <ImageButton
         android:id="@+id/buttonMale"
+        android:layout_marginTop="20dp"
         android:layout_width="131dp"
         android:layout_height="131dp"
-        android:layout_marginStart="224dp"
-        android:layout_marginTop="144dp"
         android:backgroundTint="#FFFFFF"
+        android:contentDescription="@string/bottonemaschio"
         android:scaleType="fitCenter"
+        app:layout_constraintEnd_toStartOf="@+id/buttonFemale"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/male"
-        android:contentDescription="@string/bottonemaschio" />
+        app:layout_constraintTop_toBottomOf="@+id/sei"
+        app:srcCompat="@drawable/male" />
 
     <ImageButton
         android:id="@+id/buttonFemale"
+        android:layout_marginTop="20dp"
         android:layout_width="131dp"
         android:layout_height="131dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="144dp"
         android:backgroundTint="#FFFFFF"
+        android:contentDescription="@string/bottonefemmina"
         android:scaleType="fitCenter"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/female"
-        android:contentDescription="@string/bottonefemmina" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buttonMale"
+        app:layout_constraintTop_toBottomOf="@+id/sei"
+        app:srcCompat="@drawable/female" />
 
     <TextView
-        android:id="@+id/username"
+        android:id="@+id/sei"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="184dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="10dp"
         android:text="@string/sei"
         android:textColor="@color/black"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/buttonContinua"
         android:layout_width="186dp"
         android:layout_height="57dp"
-        android:layout_marginStart="112dp"
-        android:layout_marginBottom="48dp"
         android:text="@string/continua"
+        app:layout_constraintTop_toBottomOf="@+id/donne"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

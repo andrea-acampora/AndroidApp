@@ -7,27 +7,11 @@
     tools:context=".MatchFragment"
      >
 
-    <TextView
-        android:id="@+id/match_request_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#D70288D1"
-        android:paddingTop="10dp"
-        android:paddingBottom="20dp"
-        android:text="Match Requests"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textColor="#000000"
-        android:textIsSelectable="false"
-        android:textSize="30dp"
-        android:textStyle="bold|italic" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/match_request_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/match_request_title"
-        android:background="#5E91F4D8" />
+        android:background="#0091F4D8" />
 
 
 

@@ -9,14 +9,17 @@
     <include layout="@layout/top_app_bar"/>
 
     <TextView
+        android:id="@+id/login_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:fontFamily="sans-serif-black"
         android:text="LOGIN"
         android:textAlignment="center"
         android:textColor="@color/color_black"
+        android:layout_centerHorizontal="true"
         android:textSize="30sp"
-        android:textStyle="bold"
-        android:layout_marginTop="150dp"   />
+        android:textStyle="bold" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:padding="10dp"
@@ -29,11 +32,13 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/email_login"
-            android:inputType="textEmailAddress"
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email" />
+            android:background="#A8E0E8"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -52,10 +57,14 @@
         <com.google.android.material.textfield.TextInputEditText
 
             android:id="@+id/password_login"
-            android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password" />
+            android:background="#A8E0E8"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:textColor="@color/black"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="@color/black" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -77,13 +86,22 @@
         android:layout_below="@id/button_login"
         android:layout_marginTop="20dp"/>
 
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/facevook_login_button"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="365dp"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/email_login_TIL"
+        android:layout_below="@+id/login_button"
+        android:layout_alignParentStart="true"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/google_sign_in_button"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="57dp"
+        android:text="Inserisci qui il tuo username e password oppure accedi tramite Google"
+        android:textAlignment="center"
+        android:textColor="#393232"
+        android:textSize="18sp"
+        android:textStyle="italic" />
 
 
 </RelativeLayout>

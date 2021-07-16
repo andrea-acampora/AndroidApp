@@ -20,7 +20,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="85dp"
-        android:background="#00FFFFFF"
+        android:background="#37FBFDD0"
         android:orientation="horizontal"
         android:textAlignment="center">
 

@@ -56,7 +56,6 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private SignInButton googleSignInButton;
     private CallbackManager mCallbackManager;
-    private LoginButton facebookLoginButton;
     private FirebaseAuth.AuthStateListener authStateListener;
     private AccessTokenTracker accessTokenTracker;
 
@@ -88,22 +87,9 @@ public class LoginActivity extends AppCompatActivity {
          emailTIET = findViewById(R.id.email_login);
          passwordTIET = findViewById(R.id.password_login);
          loginButton = findViewById(R.id.button_login);
-         facebookLoginButton = findViewById(R.id.facevook_login_button);
-         facebookLoginButton.setReadPermissions("email");
          mCallbackManager = CallbackManager.Factory.create();
 
-         facebookLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-             @Override
-             public void onSuccess(LoginResult loginResult) {
-                loginUserWithFacebook(loginResult.getAccessToken());
-             }
 
-             @Override
-             public void onCancel() { }
-
-             @Override
-             public void onError(FacebookException error) { }
-         });
 
          authStateListener = firebaseAuth -> {
              FirebaseUser user = mAuth.getCurrentUser();
