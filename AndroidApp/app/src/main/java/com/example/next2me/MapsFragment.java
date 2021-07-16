@@ -85,17 +85,55 @@ public class MapsFragment extends Fragment {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             mMap = googleMap;
+            Log.d("map", "mappa funziona");
+            addUserMarker();
             getAllMatches();
-
-            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                @Override
-                public boolean onMarkerClick(@NonNull Marker marker) {
-                    String uid = markersId.get(marker);
-                    return false;
-                }
-            });
         }
     };
+
+    private void addUserMarker() {
+        LatLng pos = ((HomeActivity)getActivity()).getCurrentUserPos();
+        Marker marker = mMap.addMarker(new MarkerOptions().position(pos));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(pos));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pos, 12));
+        idMarkers.put(FirebaseAuth.getInstance().getCurrentUser().getUid(), marker);
+        markersId.put(marker, FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+        DatabaseReference reference = DatabaseHelper.getInstance().getDb().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        reference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                if(snapshot.getKey().equals("POS")){
+                    Double lat = (Double) snapshot.child("lat").getValue();
+                    Double lng = (Double) snapshot.child("long").getValue();
+                    Marker marker = idMarkers.get(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    if (marker != null) {
+                        marker.setPosition(new LatLng(lat, lng));
+                    }
+                }
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
 
     private void setBitmap(Bitmap bitmap){
         this.imageBitmap = Bitmap.createBitmap(bitmap);
@@ -120,10 +158,7 @@ public class MapsFragment extends Fragment {
     }
 
     private void getAllMatches(){
-
         DatabaseReference reference = DatabaseHelper.getInstance().getDb().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("MATCHES");
-
-
         reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -148,6 +183,7 @@ public class MapsFragment extends Fragment {
     }
 
     private void addListenerToMatch(String uid){
+
         DatabaseReference reference = DatabaseHelper.getInstance().getDb().getReference("Users").child(uid);
         reference.addChildEventListener(new ChildEventListener() {
             @Override
@@ -202,15 +238,15 @@ public class MapsFragment extends Fragment {
                                 }
                             });
 
+
                     DatabaseReference reference = DatabaseHelper.getInstance().getDb().getReference("Users").child(uid).child("POS");
                     reference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            Double lat = (Double) snapshot.child("lat").getValue();
+                            /*Double lat = (Double) snapshot.child("lat").getValue();
                             Double lng = (Double) snapshot.child("long").getValue();
-                            LatLng currentUserPos = new LatLng(lat, lng);
-                            mMap.moveCamera(CameraUpdateFactory.newLatLng(currentUserPos));
-                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentUserPos, 12));
+                            LatLng currentUserPos = new LatLng(lat, lng);*/
+
                         }
 
                         @Override
@@ -218,9 +254,6 @@ public class MapsFragment extends Fragment {
 
                         }
                     });
-
-
-
                 }
             }
 
@@ -252,6 +285,7 @@ public class MapsFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
+
     }
 
     public int dp(float value) {

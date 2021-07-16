@@ -42,7 +42,7 @@ public class ListViewModel extends AndroidViewModel {
                             LatLng otherUserLoc = new LatLng((double)user.child("POS").child("lat").getValue(),(double)user.child("POS").child("long").getValue());
                             double distance = SphericalUtil.computeDistanceBetween(currentUserPos, otherUserLoc);
                             if (distance < 5000){
-                                users.add(new CardItem(user.child("INFORMATIONS").child("name").getValue().toString(), user.getKey(), user.child("INFORMATIONS").child("birthdate").getValue().toString()));
+                                users.add(new CardItem(user.child("INFORMATIONS").child("name").getValue().toString(), user.getKey(), user.child("INFORMATIONS").child("birthdate").getValue().toString(), distance/1000));
                             }
                         }
                     }

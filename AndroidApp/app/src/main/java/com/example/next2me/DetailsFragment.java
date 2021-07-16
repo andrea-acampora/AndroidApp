@@ -1,5 +1,6 @@
 package com.example.next2me;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,6 +26,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.next2me.service.NotificationsHelper;
 import com.example.next2me.utils.DatabaseHelper;
+import com.example.next2me.utils.Utilities;
 import com.example.next2me.viewmodel.CardItem;
 import com.example.next2me.viewmodel.ListViewModel;
 import com.google.android.material.textfield.TextInputEditText;
@@ -50,11 +53,14 @@ public class DetailsFragment extends Fragment {
     private ImageButton matchRequest;
     private ListViewModel listViewModel;
     private TextView eta;
+    private ImageButton matchRefused;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setHasOptionsMenu(true);
+        
     }
 
     @Nullable
@@ -70,9 +76,10 @@ public class DetailsFragment extends Fragment {
         this.name = view.findViewById(R.id.nome);
         this.profilePic = view.findViewById(R.id.profile);
         this.matchRequest = view.findViewById(R.id.matchRequest);
+        this.matchRefused = view.findViewById(R.id.matchRefused);
         this.descrizione = view.findViewById(R.id.descrizione);
         //this.genere = view.findViewById(R.id.genere);
-       // this.eta = view.findViewById(R.id.eta);
+        //this.eta = view.findViewById(R.id.eta);
 
 
         Activity activity = getActivity();
@@ -81,7 +88,6 @@ public class DetailsFragment extends Fragment {
             listViewModel.getSelected().observe(getViewLifecycleOwner(), new Observer<CardItem>() {
                 @Override
                 public void onChanged(CardItem cardItem) {
-                    name.setText(cardItem.getName());
 
                     DatabaseReference reference = DatabaseHelper.getInstance().getDb().getReference("Users").child(cardItem.getId()).child("INFORMATIONS");
                     reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -92,7 +98,7 @@ public class DetailsFragment extends Fragment {
                             String gender = snapshot.child("gender").getValue().toString();
                             String birthdate = snapshot.child("birthdate").getValue().toString();
                             descrizione.setText(description);
-                           /* genere.setText(gender);
+                            //genere.setText(gender);
 
 
                             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -108,7 +114,11 @@ public class DetailsFragment extends Fragment {
                             int month = c.get(Calendar.MONTH) + 1;
                             int day = c.get(Calendar.DAY_OF_MONTH);
 
-                            eta.setText(getAge(year, month, day));*/
+                            //eta.setText(getAge(year, month, day));
+                            String nome = cardItem.getName();
+                            String nameUpp = nome.substring(0, 1).toUpperCase() + nome.substring(1);
+                            name.setText(nameUpp + ", " + getAge(year, month, day) + " anni");
+
 
                         }
 
@@ -145,14 +155,25 @@ public class DetailsFragment extends Fragment {
                     public void onCancelled(@NonNull DatabaseError error) {}
                 });
 
+                Utilities.insertFragment((AppCompatActivity) getActivity(), new DashboardFragment(),"DASHBOARD FRAGMENT");
             }
+
+        });
+
+
+        this.matchRefused.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utilities.insertFragment((AppCompatActivity) getActivity(), new DashboardFragment(),"DASHBOARD FRAGMENT");
+            }
+
         });
     }
 
     private void setImage(String profilePicId) {
         StorageReference imageRef = DatabaseHelper.getInstance().getStorageRef().child("ProfilePictures/" + profilePicId + ".jpg");
         RequestOptions requestOptions = new RequestOptions();
-        requestOptions = requestOptions.transform(new CenterCrop(), new RoundedCorners(16));
+        requestOptions = requestOptions.transform(new CenterCrop(), new RoundedCorners(30));
         GlideApp.with(getView())
                 .load(imageRef)
                 .apply(requestOptions)

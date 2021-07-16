@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initCometChat();
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             sendUserNotificationsTokenIdToServer(UserHelper.getInstance().getNotificationsTokenId());
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
                     Boolean isUserRegistered = dataSnapshot.exists();
                     if(!isUserRegistered){
                         startActivity(new Intent(getApplicationContext(), RegistrationActivity.class));
+
                     }else{
                         startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                     }
@@ -60,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
             registerButton.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, SignUpActivity.class)));
         }
 
-        initCometChat();
     }
 
     private void initCometChat() {

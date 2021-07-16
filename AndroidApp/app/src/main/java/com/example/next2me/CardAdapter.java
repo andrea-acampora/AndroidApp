@@ -52,6 +52,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         String name = cardItems.get(position).getName();
         String nameUpp = name.substring(0, 1).toUpperCase() + name.substring(1);
         holder.username.setText(nameUpp + ", " + getAge(cardItems.get(position).getBirthday()));
+        holder.distance.setText(String.format("%.2f", cardItems.get(position).getDistanceKm())+"km");
         //holder.imageView.setImageResource(profilePic.get(position));
         holder.setImage(cardItems.get(position).getId());
     }
@@ -73,6 +74,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 
         ImageView userPic;
         TextView username;
+        TextView distance;
         private DashboardFragment dashboardFragment = new DashboardFragment();
         private OnItemListener itemListener;
 
@@ -81,6 +83,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             super(itemView);
             userPic = itemView.findViewById(R.id.userPic);
             username = itemView.findViewById(R.id.username);
+            distance = itemView.findViewById(R.id.distance);
 
             itemListener = listener;
 
@@ -90,7 +93,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         public void setImage(String profilePicId){
             StorageReference imageRef = DatabaseHelper.getInstance().getStorageRef().child("ProfilePictures/" + profilePicId + ".jpg");
             RequestOptions requestOptions = new RequestOptions();
-            requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(16));
+            requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(22));
             GlideApp.with(itemView)
                     .load(imageRef)
                     .apply(requestOptions)

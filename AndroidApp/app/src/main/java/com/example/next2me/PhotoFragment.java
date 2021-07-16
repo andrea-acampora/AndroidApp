@@ -99,6 +99,7 @@ public class PhotoFragment extends Fragment {
                                                     UserHelper.getInstance().setProfilePic(bitmap);
                                                     DatabaseHelper dbh = DatabaseHelper.getInstance();
                                                     dbh.addPhotoToStorage(UserHelper.getInstance().getProfilePic(), FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                                    dbh.addPhotoToStorage(UserHelper.getInstance().getProfilePic(), FirebaseAuth.getInstance().getCurrentUser().getUid());
                                                     dbh.addUserToDB(UserHelper.getInstance().getAppUser());
                                                     registerUserInCometChat();
                                                     startActivity(new Intent(getActivity(), HomeActivity.class));
@@ -153,7 +154,9 @@ public class PhotoFragment extends Fragment {
         });
 
 
-        StorageReference reference = DatabaseHelper.getInstance().getStorageRef().child("ProfilePictures/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + ".jpg");
+
+
+        /*StorageReference reference = DatabaseHelper.getInstance().getStorageRef().child("ProfilePictures/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + ".jpg");
         reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
@@ -169,7 +172,7 @@ public class PhotoFragment extends Fragment {
                     }
                 });
             }
-        });
+        });*/
     }
 
     private void takePictureFromGallery() {
