@@ -63,7 +63,7 @@ public class GenderFragment extends Fragment {
             btnContinua.setOnClickListener((View.OnClickListener) v -> {
             if(getUserPreferences()!=null){
                 UserHelper.getInstance().setPreferences(getUserPreferences());
-                Utilities.insertFragment((AppCompatActivity) activity, new DescriptionFragment(), "DESCRIPTION_FRAGMENT", null);
+                Utilities.insertFragment((AppCompatActivity) activity, new DescriptionFragment(), "DESCRIPTION_FRAGMENT");
             }
             });
         }
