@@ -1,5 +1,6 @@
 package com.example.next2me;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,12 +43,17 @@ public class GenderFragment extends Fragment {
 
             maleButton.setOnClickListener(v -> {
                 UserHelper.getInstance().setGender("M");
-                femaleButton.setVisibility(View.INVISIBLE);
+                //femaleButton.setVisibility(View.INVISIBLE);
+                maleButton.getBackground().setTint(Color.parseColor("#99E6FF"));
+                femaleButton.getBackground().setTint(Color.WHITE);
+
             });
 
             femaleButton.setOnClickListener(v -> {
                 UserHelper.getInstance().setGender("F");
-                maleButton.setVisibility(View.INVISIBLE);
+                //maleButton.setVisibility(View.INVISIBLE);
+                femaleButton.getBackground().setTint(Color.parseColor("#FFCCFF"));
+                maleButton.getBackground().setTint(Color.WHITE);
             });
 
             malePref = view.findViewById(R.id.uomini);
@@ -57,11 +63,10 @@ public class GenderFragment extends Fragment {
             btnContinua.setOnClickListener((View.OnClickListener) v -> {
             if(getUserPreferences()!=null){
                 UserHelper.getInstance().setPreferences(getUserPreferences());
-                Utilities.insertFragment((AppCompatActivity) activity, new DescriptionFragment(), "DESCRIPTION_FRAGMENT");
+                Utilities.insertFragment((AppCompatActivity) activity, new DescriptionFragment(), "DESCRIPTION_FRAGMENT", null);
             }
             });
         }
-
     }
 
     private String getUserPreferences(){
